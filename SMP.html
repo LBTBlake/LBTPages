@@ -1,0 +1,1302 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root {
+    --ink: #090D38;
+    --citrus: #F26101;
+    --sky: #E6F1F9;
+    --white: #ffffff;
+    --ink50: rgba(9,13,56,0.5);
+    --ink10: rgba(9,13,56,0.08);
+    --ink15: rgba(9,13,56,0.12);
+    --red: #ef4444;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --blue: #0ea5e9;
+    --purple: #6366f1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', 'DM Sans', system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: #f8fafc;
+    line-height: 1.7;
+  }
+
+  /* ── DOC HEADER ── */
+  .doc-header {
+    background: var(--ink);
+    color: var(--white);
+    padding: 28px 32px 24px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0;
+  }
+  .doc-header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .lbt-logo {
+    background: var(--citrus);
+    color: #fff;
+    font-weight: 900;
+    font-size: 18px;
+    padding: 6px 13px;
+    border-radius: 6px;
+    letter-spacing: -0.5px;
+  }
+  .doc-title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+  .doc-subtitle { font-size: 13px; opacity: 0.65; margin-top: 2px; }
+  .doc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+  }
+  .meta-pill span { color: rgba(255,255,255,0.5); margin-right: 5px; }
+  .internal-badge {
+    background: var(--citrus);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.8px;
+    margin-left: auto;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--sky);
+    border-left: 4px solid var(--citrus);
+    padding: 18px 22px;
+    margin-bottom: 28px;
+    border-radius: 0 6px 6px 0;
+  }
+  .toc-title { font-weight: 800; font-size: 12px; color: var(--ink); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 24px; }
+  .toc-item { font-size: 13px; color: var(--ink); padding: 2px 0; }
+  .toc-item a { color: var(--ink); text-decoration: none; }
+  .toc-item a:hover { color: var(--citrus); }
+  .toc-num { color: var(--citrus); font-weight: 700; margin-right: 6px; }
+
+  /* ── SECTION WRAPPER ── */
+  .section { margin-bottom: 36px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--ink);
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+  }
+  .section-num {
+    background: var(--citrus);
+    color: #fff;
+    font-weight: 900;
+    font-size: 13px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 16px; font-weight: 800; color: #fff; }
+  .section-body {
+    background: var(--white);
+    border: 1px solid var(--ink15);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 22px 24px;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 20px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--sky);
+  }
+  h3:first-child { margin-top: 0; }
+  h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--citrus);
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+  }
+  p { font-size: 13.5px; line-height: 1.75; margin-bottom: 10px; color: var(--ink); }
+  p:last-child { margin-bottom: 0; }
+  strong { font-weight: 700; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 6px;
+    padding: 13px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .callout-info { background: #eff6ff; border-left: 3px solid #3b82f6; }
+  .callout-warning { background: #fffbeb; border-left: 3px solid var(--amber); }
+  .callout-success { background: #f0fdf4; border-left: 3px solid var(--green); }
+  .callout-danger { background: #fef2f2; border-left: 3px solid var(--red); }
+  .callout-brand { background: rgba(242,97,1,0.07); border-left: 3px solid var(--citrus); }
+  .callout-sky { background: var(--sky); border-left: 3px solid var(--ink); }
+  .callout-title { font-weight: 700; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── QUOTE / TALK TRACK ── */
+  .talk-track {
+    background: var(--sky);
+    border-left: 4px solid var(--ink);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    font-style: italic;
+    font-size: 13px;
+    margin: 8px 0;
+    color: var(--ink);
+    line-height: 1.75;
+  }
+  .talk-label {
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--citrus);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  /* ── OBJECTION BOX ── */
+  .objection {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 11px 14px;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  .objection-q { font-weight: 700; color: var(--red); margin-bottom: 5px; font-size: 12px; }
+  .objection-a { color: var(--ink); line-height: 1.7; }
+
+  /* ── TABLES ── */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  thead tr { background: var(--ink); color: #fff; }
+  thead th { padding: 10px 12px; text-align: left; font-weight: 700; font-size: 12px; }
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody tr:hover { background: var(--sky); }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--ink15); vertical-align: top; line-height: 1.6; }
+  .td-center { text-align: center; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge-citrus { background: rgba(242,97,1,0.12); color: var(--citrus); }
+  .badge-red { background: #fef2f2; color: var(--red); }
+  .badge-green { background: #f0fdf4; color: #16a34a; }
+  .badge-amber { background: #fffbeb; color: #b45309; }
+  .badge-blue { background: #eff6ff; color: #2563eb; }
+  .badge-purple { background: #f5f3ff; color: #7c3aed; }
+  .badge-ink { background: var(--ink10); color: var(--ink); }
+
+  /* ── GRID CARDS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 12px 0; }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--ink15);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .card-title { font-size: 13px; font-weight: 800; margin-bottom: 6px; }
+  .card-body { font-size: 12.5px; color: rgba(9,13,56,0.7); line-height: 1.65; }
+
+  /* ── STAT CARDS ── */
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--ink15);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-label { font-size: 11px; color: var(--ink50); margin-bottom: 4px; }
+  .stat-value { font-size: 18px; font-weight: 900; }
+
+  /* ── DOMAIN CARD ── */
+  .domain-card {
+    border: 1px solid var(--ink15);
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .domain-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 15px;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .domain-icon { font-size: 18px; }
+  .domain-body { padding: 14px 16px; background: var(--white); border-top: 1px solid var(--ink15); }
+
+  /* ── ARTICLE ROW ── */
+  .article-row {
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 11px 14px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--ink15);
+  }
+  .article-title { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+  .article-hook { font-size: 12px; color: var(--ink50); font-style: italic; margin-bottom: 6px; }
+  .article-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tag-citrus { background: var(--citrus); color: #fff; }
+  .tag-ink { background: var(--ink); color: #fff; }
+  .tag-green { background: var(--green); color: #fff; }
+  .tag-amber { background: var(--amber); color: #fff; }
+  .tag-blue { background: var(--blue); color: #fff; }
+  .tag-purple { background: var(--purple); color: #fff; }
+  .tag-red { background: var(--red); color: #fff; }
+
+  /* ── EMAIL BOX ── */
+  .email-box {
+    background: #f8fafc;
+    border: 1px solid var(--ink15);
+    border-radius: 6px;
+    padding: 13px 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 12.5px;
+    white-space: pre-wrap;
+    color: var(--ink);
+    line-height: 1.8;
+    margin: 8px 0;
+  }
+  .email-subject { font-weight: 700; margin-bottom: 8px; font-size: 13px; }
+  .email-day { display: inline-block; background: var(--citrus); color: #fff; font-weight: 700; font-size: 10px; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px; font-family: sans-serif; }
+
+  /* ── FUNNEL STEP ── */
+  .funnel-step {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    border-left: 5px solid;
+  }
+  .funnel-title { font-weight: 800; font-size: 14px; margin-bottom: 3px; }
+  .funnel-goal { font-size: 12px; margin-bottom: 10px; opacity: 0.7; }
+  .funnel-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .funnel-action { background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.08); border-radius: 5px; padding: 3px 10px; font-size: 11.5px; }
+
+  /* ── LANG COMPARE ── */
+  .lang-table { margin: 12px 0; }
+  .lang-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 6px; }
+  .lang-bad { background: #fef2f2; border: 1px solid #fecaca; border-radius: 5px 0 0 5px; padding: 9px 13px; font-size: 12.5px; color: var(--red); }
+  .lang-good { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0 5px 5px 0; padding: 9px 13px; font-size: 12.5px; color: #15803d; }
+  .lang-header { font-weight: 800; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; padding: 6px 13px; }
+  .lang-header-bad { background: var(--red); color: #fff; border-radius: 5px 0 0 0; }
+  .lang-header-good { background: #16a34a; color: #fff; border-radius: 0 5px 0 0; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 14px;
+    font-size: 11px;
+    border-radius: 0 0 10px 10px;
+    margin-top: 36px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 2px solid var(--sky); margin: 18px 0; }
+
+  /* ── HIGHLIGHT ── */
+  mark { background: rgba(242,97,1,0.15); color: var(--ink); padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+  .list-arrow { list-style: none; padding: 0; }
+  .list-arrow li { padding: 4px 0; font-size: 13px; padding-left: 18px; position: relative; border-bottom: 1px solid var(--sky); }
+  .list-arrow li::before { content: "→"; position: absolute; left: 0; color: var(--citrus); font-weight: 700; }
+  .list-arrow li:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     DOC HEADER
+══════════════════════════════════════════════ -->
+<div class="doc-header">
+  <div class="doc-header-top">
+    <div class="lbt-logo">LBT</div>
+    <div>
+      <div class="doc-title">Sales &amp; Marketing Plan</div>
+      <div class="doc-subtitle">Technology Resilience Score™ — Go-To-Market Strategy</div>
+    </div>
+    <div class="internal-badge">INTERNAL</div>
+  </div>
+  <div class="doc-meta">
+    <div class="meta-pill"><span>Author</span>Nick Haley</div>
+    <div class="meta-pill"><span>Created</span>March 2026</div>
+    <div class="meta-pill"><span>Status</span>Live</div>
+    <div class="meta-pill"><span>Review</span>September 2026</div>
+    <div class="meta-pill"><span>Related</span>Maturity Assessment · Consultant Scoring Playbook · CW Sell Proposal Spec</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TOC
+══════════════════════════════════════════════ -->
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-grid">
+    <div class="toc-item"><span class="toc-num">1</span>Positioning &amp; Brand Language Rules</div>
+    <div class="toc-item"><span class="toc-num">2</span>Marketing &amp; Sales Funnel</div>
+    <div class="toc-item"><span class="toc-num">3</span>Blog Content Plan (30 Articles)</div>
+    <div class="toc-item"><span class="toc-num">4</span>Landing Pages</div>
+    <div class="toc-item"><span class="toc-num">5</span>PPC Campaign Strategy</div>
+    <div class="toc-item"><span class="toc-num">6</span>Sales Playbook &amp; Talk Tracks</div>
+    <div class="toc-item"><span class="toc-num">7</span>Email Sequences</div>
+    <div class="toc-item"><span class="toc-num">8</span>Sales Enablement Assets</div>
+    <div class="toc-item"><span class="toc-num">9</span>90-Day Launch Plan</div>
+    <div class="toc-item"><span class="toc-num">10</span>Key Metrics &amp; Targets</div>
+  </div>
+</div>
+
+<div class="callout callout-brand" style="margin-bottom:28px;">
+  <div class="callout-title">Purpose of this document</div>
+  The Technology Resilience Score™ is not a marketing add-on — it is the <strong>entry point to every client conversation, the justification for every project, and the anchor for long-term client growth</strong>. Every marketing touchpoint, sales call, and client report must reinforce the same message: your score tells you where you are, your roadmap shows where you can go, and LBT gets you there. This document should be reviewed quarterly. <strong>Last updated: March 2026.</strong>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — POSITIONING
+══════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Positioning &amp; Brand Language Rules</div>
+  </div>
+  <div class="section-body">
+
+    <h3>Positioning Statement</h3>
+    <div class="talk-track" style="font-style:normal; font-size:14px; border-left-color: var(--citrus); background: rgba(242,97,1,0.06);">
+      "Little Big Tech is the only managed IT provider in [region] that <strong>measures, tracks, and guarantees improvement</strong> in your Technology Resilience Score™ — giving you a verified, business-language view of your operational risk, and a clear trajectory to the level that satisfies your insurers, clients, and growth ambitions."
+    </div>
+
+    <h3>The Core Commercial Framework</h3>
+    <div class="grid-2">
+      <div class="card" style="border-top: 3px solid var(--citrus);">
+        <div class="card-title">🎯 The Prospect Hook</div>
+        <ul class="list-arrow">
+          <li>Free Lite Assessment → instant score</li>
+          <li>Benchmarked vs SMB average (2.35)</li>
+          <li>Top 3 risks named in plain English</li>
+          <li>Clear CTA to understand the full picture</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--purple);">
+        <div class="card-title">⚙️ The Sales Engine</div>
+        <ul class="list-arrow">
+          <li>Paid Assessment → verified scorecard</li>
+          <li>Risk register with business-language entries</li>
+          <li>Score trajectory: Month 3 / 12 / 24</li>
+          <li>Proposal auto-populated from assessment data</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--green);">
+        <div class="card-title">🔄 The Retention Anchor</div>
+        <ul class="list-arrow">
+          <li>QBR built around score movement</li>
+          <li>Score improvement = proof of value</li>
+          <li>Upsell triggers tied to score thresholds</li>
+          <li>Annual reassessment keeps clients engaged</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--blue);">
+        <div class="card-title">💡 The Differentiation Story</div>
+        <ul class="list-arrow">
+          <li>Most MSPs measure activity (tickets, uptime)</li>
+          <li>LBT measures <strong>outcome</strong> (resilience score)</li>
+          <li>Score is ownable, repeatable, defensible</li>
+          <li>Clients show it to insurers &amp; enterprise prospects</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Brand Language Rules — Non-Negotiable</h3>
+    <p>All consultants and marketing materials must follow these rules. There are no exceptions.</p>
+
+    <h4>Rule 1 — Always connect the score to a business risk</h4>
+    <div class="lang-table">
+      <div class="lang-row">
+        <div class="lang-header lang-header-bad">❌ Never say</div>
+        <div class="lang-header lang-header-good">✅ Always say</div>
+      </div>
+      <div class="lang-row">
+        <div class="lang-bad">IAM maturity is low.</div>
+        <div class="lang-good">Your score is being impacted by weaknesses in access control, increasing the likelihood of unauthorised access and credential-based attacks.</div>
+      </div>
+      <div class="lang-row">
+        <div class="lang-bad">You scored 1 on backup — that's very bad.</div>
+        <div class="lang-good">Your current backup position represents one of the highest areas of operational risk we identified. Without a tested, immutable backup strategy, a ransomware incident could result in permanent data loss and extended business downtime.</div>
+      </div>
+      <div class="lang-row">
+        <div class="lang-bad">Most of our clients are better than you at this.</div>
+        <div class="lang-good">Most organisations of your size operate at 3.5+. Your current position of 2.3 presents elevated operational risk relative to your peers.</div>
+      </div>
+      <div class="lang-row">
+        <div class="lang-bad">You need to fix your MFA urgently.</div>
+        <div class="lang-good">Phase 1 of your resilience programme is focused on lifting your score above 3.0 — the risk stabilisation threshold — by addressing the three highest-impact areas identified in this assessment.</div>
+      </div>
+      <div class="lang-row">
+        <div class="lang-bad">This will cost £X per month.</div>
+        <div class="lang-good">This investment supports your ability to scale, retain clients, and meet supplier and regulatory expectations.</div>
+      </div>
+      <div class="lang-row">
+        <div class="lang-bad">We found a number of issues with your IT security.</div>
+        <div class="lang-good">Your Technology Resilience Score provides a clear baseline of your current environment and highlights a strong opportunity to enhance resilience, reduce risk, and support future growth.</div>
+      </div>
+    </div>
+
+    <h4>Rule 2 — Always pair a score with an opportunity</h4>
+    <div class="callout callout-sky">Ambitious clients don't respond to <em>"you're at risk."</em> They respond to <em>"you have a clear path to becoming stronger, more scalable, and more resilient — and we can get you there."</em></div>
+
+    <h4>Rule 3 — Always reference trajectory</h4>
+    <div class="talk-track">"You've improved from 2.5 to 3.2 — demonstrating measurable progress in strengthening your operational resilience and significantly reducing your exposure to the most common causes of downtime and breach at your scale."</div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — FUNNEL
+══════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Marketing &amp; Sales Funnel</div>
+  </div>
+  <div class="section-body">
+
+    <div class="funnel-step" style="border-color:#6366f1; background:#f5f3ff;">
+      <div class="funnel-title">Stage 1 — Awareness <span class="badge badge-purple" style="font-size:11px; margin-left:8px;">Cold</span></div>
+      <div class="funnel-goal">Generate demand for the Technology Resilience Score™ concept among MDs, FDs, and CEOs at 10–250 staff UK businesses</div>
+      <div class="funnel-actions">
+        <span class="funnel-action">📝 Blog content targeting decision-maker pain points</span>
+        <span class="funnel-action">🔍 Google Search PPC on high-intent cyber risk keywords</span>
+        <span class="funnel-action">💼 LinkedIn thought leadership from founders &amp; consultants</span>
+        <span class="funnel-action">📰 PR: local business press &amp; trade publications</span>
+        <span class="funnel-action">🤝 Referral programme for existing clients</span>
+      </div>
+    </div>
+
+    <div class="funnel-step" style="border-color:#0ea5e9; background:#eff6ff;">
+      <div class="funnel-title">Stage 2 — Interest <span class="badge badge-blue" style="font-size:11px; margin-left:8px;">Warm</span></div>
+      <div class="funnel-goal">Drive prospects to complete the free Lite Assessment on the website</div>
+      <div class="funnel-actions">
+        <span class="funnel-action">🌐 Lite Assessment landing page with clear value proposition</span>
+        <span class="funnel-action">🎯 Retargeting ads to blog readers &amp; web visitors</span>
+        <span class="funnel-action">💼 LinkedIn Lead Gen targeting MDs/FDs at 10–250 staff</span>
+        <span class="funnel-action">📧 3-touch email nurture for downloaded content</span>
+        <span class="funnel-action">🔗 Partner channel: accountants, solicitors, insurers</span>
+      </div>
+    </div>
+
+    <div class="funnel-step" style="border-color:var(--amber); background:#fffbeb;">
+      <div class="funnel-title">Stage 3 — Consideration <span class="badge badge-amber" style="font-size:11px; margin-left:8px;">Hot</span></div>
+      <div class="funnel-goal">Convert Lite completions into Paid Assessment bookings</div>
+      <div class="funnel-actions">
+        <span class="funnel-action">📊 Automated email report with score + CTA to book call</span>
+        <span class="funnel-action">📞 Sales follow-up within 24 hours of Lite completion</span>
+        <span class="funnel-action">📖 Case study: "Client from 2.3 to 3.8 in 90 days"</span>
+        <span class="funnel-action">💰 ROI framing: cost of breach vs cost of managed resilience</span>
+      </div>
+    </div>
+
+    <div class="funnel-step" style="border-color:var(--green); background:#f0fdf4;">
+      <div class="funnel-title">Stage 4 — Decision <span class="badge badge-green" style="font-size:11px; margin-left:8px;">Close</span></div>
+      <div class="funnel-goal">Close the Paid Assessment → managed service proposal</div>
+      <div class="funnel-actions">
+        <span class="funnel-action">📋 Paid Assessment debrief with scorecard &amp; risk register</span>
+        <span class="funnel-action">📄 CW Sell proposal auto-populated from assessment data</span>
+        <span class="funnel-action">📈 Score trajectory: Month 3 / 12 / 24</span>
+        <span class="funnel-action">🏛 Board-ready executive summary for CFO/CEO</span>
+        <span class="funnel-action">✅ Onboarding outcome guarantee</span>
+      </div>
+    </div>
+
+    <div class="funnel-step" style="border-color:var(--citrus); background:rgba(242,97,1,0.05);">
+      <div class="funnel-title">Stage 5 — Retention &amp; Growth <span class="badge badge-citrus" style="font-size:11px; margin-left:8px;">Ongoing</span></div>
+      <div class="funnel-goal">Grow ARPU and reduce churn through score-based QBRs</div>
+      <div class="funnel-actions">
+        <span class="funnel-action">📊 Quarterly score update via BrightGauge dashboard</span>
+        <span class="funnel-action">🗓 QBR deck: "You've moved from X to Y — here's what's next"</span>
+        <span class="funnel-action">🔔 Upsell triggers: score threshold alerts in ConnectWise</span>
+        <span class="funnel-action">🔄 Annual reassessment with updated risk register</span>
+        <span class="funnel-action">🤝 Client referral programme: "Score your network"</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3 — BLOG CONTENT
+══════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Blog Content Plan — 30 Articles</div>
+  </div>
+  <div class="section-body">
+
+    <div class="callout callout-info">
+      <div class="callout-title">SEO Strategy</div>
+      Each domain gets a <strong>pillar page</strong> (2,500+ words) targeting head keywords, supported by 2–3 cluster articles on long-tail variants. All CTAs drive to the Lite Assessment or Paid Assessment booking page. Publish 2–3 articles per month over 12 months.
+    </div>
+
+    <h3>Publishing Schedule</h3>
+    <table>
+      <thead><tr><th>Month</th><th>Articles</th><th>Domains</th><th>Strategic Focus</th></tr></thead>
+      <tbody>
+        <tr><td>1–2</td><td>Cyber (4) + IAM (4)</td><td>Cyber Security + Identity</td><td>Highest search volume and urgency — launch with impact</td></tr>
+        <tr><td>3–4</td><td>BCDR (3) + Monitoring (3)</td><td>BC/DR + Monitoring</td><td>Fear-based content, insurance angle</td></tr>
+        <tr><td>5–6</td><td>Endpoint (3) + Infrastructure (3)</td><td>Endpoint + Infra</td><td>Technical decision-maker content</td></tr>
+        <tr><td>7–8</td><td>Data (3) + Supply Chain (3)</td><td>Data &amp; Compliance + Supply Chain</td><td>Regulatory and enterprise contract angle</td></tr>
+        <tr><td>9–10</td><td>Culture (3) + Governance (3)</td><td>Awareness + Governance</td><td>Leadership and CFO-facing content</td></tr>
+        <tr><td>11–12</td><td>Pillar pages (10) + refresh</td><td>All domains</td><td>Full pillar page suite live — begin link building</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- DOMAIN: GOVERNANCE -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(99,102,241,0.08); color: var(--ink);">
+        <span class="domain-icon">⚙️</span>
+        <span>IT Strategy &amp; Governance</span>
+        <span class="tag tag-purple" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Without an IT strategy, businesses fly blind — no budget ownership, no accountability, no roadmap. Every other investment becomes less effective.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Unplanned spend, missed compliance deadlines, reactive IT decisions that cost 3–5× more than planned investment.</div>
+        </div>
+        <div class="article-row"><div class="article-title">Why Your Business Needs an IT Strategy (Not Just an IT Person)</div><div class="article-hook">"Most SMBs have someone 'who does the IT'. That's not a strategy — and the gap is costing you more than you think."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">IT strategy for SMB · business IT roadmap</span></div></div>
+        <div class="article-row"><div class="article-title">5 Signs Your IT Budget Is Being Wasted</div><div class="article-hook">"If you can't answer 'what did IT cost us last year and what did we get for it?' — you're in the majority."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">IT budget planning · managed IT ROI</span></div></div>
+        <div class="article-row"><div class="article-title">What Cyber Essentials Actually Requires from Your IT Policy</div><div class="article-hook">"Most SMBs fail Cyber Essentials on paperwork, not technology. Here's what assessors actually look for."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Discovery Call</span><span class="badge badge-ink">Cyber Essentials requirements · NCSC certification</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: INFRASTRUCTURE -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(14,165,233,0.08);">
+        <span class="domain-icon">☁️</span>
+        <span>Infrastructure &amp; Cloud</span>
+        <span class="tag tag-blue" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Misconfigured cloud environments are one of the top causes of data exposure — and most SMBs don't know their exposure until it's too late.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Accidental data exposure, unplanned downtime, insecure remote access, cloud bills that spiral without governance.</div>
+        </div>
+        <div class="article-row"><div class="article-title">Is Your Cloud Actually Secure? The 3 Misconfigurations That Cause Most Breaches</div><div class="article-hook">"Moving to the cloud improved your flexibility. Did it improve your security? For most SMBs, the honest answer is: we don't really know."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">cloud security SMB · M365 misconfiguration</span></div></div>
+        <div class="article-row"><div class="article-title">Why "Microsoft Is Secure" Is the Most Dangerous Thing Your IT Team Can Say</div><div class="article-hook">"Microsoft secures the platform. You're responsible for your configuration. Here's where most businesses get it wrong."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">M365 security · shared responsibility model</span></div></div>
+        <div class="article-row"><div class="article-title">The Hidden Cost of Reactive IT Infrastructure</div><div class="article-hook">"Most SMBs replace infrastructure when it breaks. Here's why that approach costs 3–5× more than proactive management."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">proactive IT · lifecycle management SMB</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: ENDPOINT -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(139,92,246,0.08);">
+        <span class="domain-icon">💻</span>
+        <span>Endpoint &amp; Device Management</span>
+        <span class="tag tag-purple" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Every device is a potential entry point. Without MDM, asset management, and hardening, one lost laptop can compromise your entire organisation.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Data loss from lost devices, ransomware via unpatched endpoints, compliance failure from unmanaged personal devices.</div>
+        </div>
+        <div class="article-row"><div class="article-title">What Happens to Your Data When a Laptop Goes Missing?</div><div class="article-hook">"Your employee leaves their laptop on the train. You have 2 hours. Could you wipe it remotely? Most SMBs can't."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">MDM UK · remote wipe laptop</span></div></div>
+        <div class="article-row"><div class="article-title">Why "We Have Antivirus" No Longer Means "We're Protected"</div><div class="article-hook">"Traditional antivirus catches about 50% of modern threats. Modern attacks are behavioural, fileless, and designed to evade it."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">EDR vs antivirus · Huntress MDR</span></div></div>
+        <div class="article-row"><div class="article-title">The Asset Register: The IT Document Every Business Ignores (Until a Breach)</div><div class="article-hook">"You can't protect what you don't know you have. An asset register is the foundation of cyber security."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">IT asset register · device management</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: IAM -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(236,72,153,0.08);">
+        <span class="domain-icon">🔑</span>
+        <span>Identity &amp; Access Management</span>
+        <span class="tag" style="background:#ec4899;color:#fff;margin-left:auto;">4 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Compromised credentials are the #1 cause of breaches. MFA, least-privilege, and a JML process are the highest-impact controls at any budget.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Credential theft, ex-employee access, privilege escalation, ransomware propagation via overprivileged accounts.</div>
+        </div>
+        <div class="article-row"><div class="article-title">MFA Is Not Optional in 2025: Why One Password Is Never Enough</div><div class="article-hook">"82% of breaches involve stolen credentials. MFA blocks over 99% of automated attacks."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">MFA for business UK · Office 365 MFA</span></div></div>
+        <div class="article-row"><div class="article-title">The Ex-Employee Access Problem: How Many Former Staff Can Still Log In?</div><div class="article-hook">"The average company has 3–5 former employees with active access at any given time."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">joiner mover leaver process · IT offboarding</span></div></div>
+        <div class="article-row"><div class="article-title">Why Admin Accounts Are Your Biggest Security Risk</div><div class="article-hook">"Your IT admin's daily-use account shouldn't have the keys to the kingdom."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">privileged access management SMB · PAM UK</span></div></div>
+        <div class="article-row"><div class="article-title">The Principle of Least Privilege: Why Your Staff Probably Have Too Much Access</div><div class="article-hook">"Most employees have access to data they'll never need. When ransomware hits, that access is its attack surface."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">least privilege access · RBAC for SMB</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: CYBER -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(239,68,68,0.08);">
+        <span class="domain-icon">🛡️</span>
+        <span>Cyber Security Controls</span>
+        <span class="tag tag-red" style="margin-left:auto;">4 articles · Highest weight domain</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> The most direct line to breach. Email is the #1 attack vector. Without layered defences — email security, EDR, vuln management, IR — it's not a matter of if, it's when.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Ransomware, phishing, BEC, extended downtime, regulatory fines, reputational damage. Average ransomware cost for an SMB: <strong>£47,000</strong> in downtime alone.</div>
+        </div>
+        <div class="article-row"><div class="article-title">Why Email Is Still the #1 Way Businesses Get Hacked — And What to Do About It</div><div class="article-hook">"Over 90% of cyberattacks start with an email. Default M365 filtering catches some of it. Here's what it misses."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">email security SMB · Proofpoint Essentials</span></div></div>
+        <div class="article-row"><div class="article-title">Ransomware in 2025: What SMBs Need to Know (and Most Don't)</div><div class="article-hook">"Ransomware isn't a big-company problem anymore. The average downtime is 21 days. Most businesses don't survive it."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">ransomware SMB UK · ransomware protection</span></div></div>
+        <div class="article-row"><div class="article-title">What Is DMARC — And Why Your Email Domain Is Probably Being Spoofed Right Now</div><div class="article-hook">"If you haven't configured DMARC, anyone can send emails that appear to come from your domain."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">DMARC UK · email spoofing · SPF DKIM</span></div></div>
+        <div class="article-row"><div class="article-title">Incident Response Planning: What Would You Do If You Were Breached Tomorrow?</div><div class="article-hook">"Most SMBs don't have an incident response plan. That's fine — until the moment they need one."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">incident response plan SMB · IR planning UK</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: DATA -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(245,158,11,0.08);">
+        <span class="domain-icon">📋</span><span>Data Protection &amp; Compliance</span>
+        <span class="tag tag-amber" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> GDPR obligations don't scale down for small businesses. Fines up to 4% of turnover. Data classification and certification are your evidence base if the ICO comes knocking.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> ICO investigation, customer compensation claims, reputational damage, supply chain disqualification without Cyber Essentials.</div>
+        </div>
+        <div class="article-row"><div class="article-title">What the ICO Actually Expects From a Small Business After a Data Breach</div><div class="article-hook">"You have 72 hours to notify the ICO. Do you know what to say, who to call, and what evidence you need?"</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">ICO breach notification · GDPR SMB UK</span></div></div>
+        <div class="article-row"><div class="article-title">Cyber Essentials in 2025: Who Needs It, What It Covers, and How to Get Certified</div><div class="article-hook">"Cyber Essentials is now required for UK government contracts and increasingly expected by enterprise clients."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">Cyber Essentials UK · IASME · government contracts</span></div></div>
+        <div class="article-row"><div class="article-title">Data Classification for Non-Technical Businesses: A Plain-English Guide</div><div class="article-hook">"Knowing what data you hold, where it lives, and how sensitive it is — it's how you know what to protect and how hard."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">data classification SMB · GDPR data mapping</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: MONITORING -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(6,182,212,0.08);">
+        <span class="domain-icon">📡</span><span>Monitoring, Logging &amp; Incident Response</span>
+        <span class="tag" style="background:#06b6d4;color:#fff;margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Most SMB breaches dwell for 207 days before detection. SIEM, log retention, and a tested IR plan are the difference between a contained incident and a catastrophic one.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Extended dwell time, undetected breaches, no forensic trail, failed insurance claims due to insufficient evidence.</div>
+        </div>
+        <div class="article-row"><div class="article-title">The 207-Day Problem: Why Most Breaches Go Undetected for Over Six Months</div><div class="article-hook">"During that time, attackers are reading emails, exfiltrating data, and planning their exit. Here's how to shorten that window."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">breach detection time · SIEM SMB</span></div></div>
+        <div class="article-row"><div class="article-title">What Is a SIEM — And Does Your Business Actually Need One?</div><div class="article-hook">"SIEM collects logs from your systems and alerts you to suspicious patterns. Here's when an SMB needs one."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">SIEM for SMB · Huntress SIEM</span></div></div>
+        <div class="article-row"><div class="article-title">Why Your Cyber Insurance Claim Might Be Rejected (And What to Do About It)</div><div class="article-hook">"Insurers are increasingly rejecting claims where businesses can't demonstrate they had adequate controls in place."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">cyber insurance UK · insurance claim rejection</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: SUPPLY CHAIN -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(132,204,22,0.08);">
+        <span class="domain-icon">🔗</span><span>Third-Party &amp; Supply Chain Risk</span>
+        <span class="tag tag-green" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Your security is only as strong as your weakest supplier. Third-party breaches accounted for 62% of all incidents last year.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Third-party breach propagating to your systems, GDPR liability for processor failures, loss of enterprise client contracts.</div>
+        </div>
+        <div class="article-row"><div class="article-title">Your IT Supplier Has Admin Access to Your Systems. Do You Know What They Can See?</div><div class="article-hook">"Most SMBs give their IT provider full admin access with no logging, no audit trail, and no formal agreement."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">third party security · vendor risk management</span></div></div>
+        <div class="article-row"><div class="article-title">GDPR and Your Suppliers: The Data Processing Agreement Every Business Needs</div><div class="article-hook">"Most SMBs have a DPA with Microsoft. Far fewer have one with their payroll bureau."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">DPA GDPR UK · data processing agreement</span></div></div>
+        <div class="article-row"><div class="article-title">The Software Supply Chain: Why What You Install Matters as Much as What You Secure</div><div class="article-hook">"SolarWinds. Kaseya. MOVEit. High-profile attacks cascaded into thousands of businesses. Here's what SMBs should do differently."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">software supply chain · third party risk SMB</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: BCDR -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(34,197,94,0.08);">
+        <span class="domain-icon">💾</span><span>Business Continuity &amp; DR</span>
+        <span class="tag tag-green" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> Most SMBs discover their backups didn't work at exactly the moment they needed them most. Immutable, tested backups and a recovery plan are non-negotiable.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Permanent data loss, extended downtime (avg 21 days for ransomware), business failure, insurance invalidation.</div>
+        </div>
+        <div class="article-row"><div class="article-title">Have You Actually Tested Your Backups? Most Businesses Haven't (Until It's Too Late)</div><div class="article-hook">"'Yes, we back up every night.' Great. But when did you last restore from that backup? For most SMBs, the answer is never."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">backup testing UK · business data backup</span></div></div>
+        <div class="article-row"><div class="article-title">What Is Immutable Backup — And Why It's the Only Backup Ransomware Can't Delete</div><div class="article-hook">"Ransomware doesn't just encrypt your live data. It goes for your backups too."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">immutable backup UK · Axient 360 backup</span></div></div>
+        <div class="article-row"><div class="article-title">Business Continuity Planning: How Long Could Your Business Survive Without Its IT?</div><div class="article-hook">"If our IT went offline today, how do we keep the business running? Most SMBs don't have an answer."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">business continuity plan SMB · BCP UK</span></div></div>
+      </div>
+    </div>
+
+    <!-- DOMAIN: CULTURE -->
+    <div class="domain-card">
+      <div class="domain-header" style="background: rgba(249,115,22,0.08);">
+        <span class="domain-icon">🎓</span><span>User Awareness &amp; Culture</span>
+        <span class="tag tag-citrus" style="margin-left:auto;">3 articles</span>
+      </div>
+      <div class="domain-body">
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div class="callout callout-brand" style="margin:0;"><strong>Why it matters:</strong> 95% of security incidents involve human error. Security awareness training transforms your biggest vulnerability into your first line of defence.</div>
+          <div class="callout callout-danger" style="margin:0;"><strong>Risk if ignored:</strong> Phishing success, credential disclosure, social engineering, accidental data breach, insider threat.</div>
+        </div>
+        <div class="article-row"><div class="article-title">Why Your Staff Are Your Biggest Cyber Security Risk — And How to Change That</div><div class="article-hook">"Attackers know that bypassing technology is hard. Tricking a human is easy."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Free Assessment</span><span class="badge badge-ink">security awareness training UK · human firewall</span></div></div>
+        <div class="article-row"><div class="article-title">Phishing Simulations: Why the Businesses That Run Them Get Breached Less</div><div class="article-hook">"A phishing simulation sends a fake phishing email to your own staff — then shows you who clicked. It's uncomfortable. It's also the most effective training available."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Get Your Score</span><span class="badge badge-ink">phishing simulation UK · Huntress SAT</span></div></div>
+        <div class="article-row"><div class="article-title">How to Build a Security Culture Without Making Staff Feel Like Suspects</div><div class="article-hook">"The best programmes make staff proud to be the first line of defence. Here's the difference."</div><div class="article-meta"><span class="badge badge-citrus">CTA: Book Assessment</span><span class="badge badge-ink">security culture SMB · cyber training staff</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4 — LANDING PAGES
+══════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">Landing Pages</div>
+  </div>
+  <div class="section-body">
+    <div class="callout callout-info">Five core conversion pages. All strip navigation to reduce exit points. Mobile-optimised — many MDs will complete the assessment on a phone.</div>
+
+    <table>
+      <thead><tr><th>Page</th><th>URL</th><th>Audience</th><th>Headline</th><th>CTA</th><th>PPC</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Free Technology Resilience Assessment</strong></td>
+          <td><code>/technology-resilience-assessment</code></td>
+          <td>Cold — MDs, FDs, CEOs at 10–250 staff</td>
+          <td>How Resilient Is Your Business Technology, Really?</td>
+          <td><span class="tag tag-citrus">Get My Free Score</span></td>
+          <td><span class="badge badge-green">✓ Primary</span></td>
+        </tr>
+        <tr>
+          <td><strong>Paid Assessment — Deep Dive</strong></td>
+          <td><code>/technology-resilience-assessment/full</code></td>
+          <td>Warm — Lite completions, referrals, LinkedIn</td>
+          <td>Your Technology Resilience Score Is Just the Start</td>
+          <td><span class="tag tag-citrus">Book Your Assessment</span></td>
+          <td><span class="badge badge-ink">—</span></td>
+        </tr>
+        <tr>
+          <td><strong>Managed IT — Resilience-Led</strong></td>
+          <td><code>/managed-it-support/technology-resilience</code></td>
+          <td>Bottom of funnel — Paid Assessment completions</td>
+          <td>From Assessment to Action: Managed IT That Improves Your Score</td>
+          <td><span class="tag tag-citrus">See Your Roadmap</span></td>
+          <td><span class="badge badge-ink">—</span></td>
+        </tr>
+        <tr>
+          <td><strong>Cyber Essentials Fast Track</strong></td>
+          <td><code>/cyber-essentials-certification</code></td>
+          <td>High intent — searching for certification</td>
+          <td>Cyber Essentials Certification in 4 Weeks — Guaranteed</td>
+          <td><span class="tag tag-citrus">Check My Readiness</span></td>
+          <td><span class="badge badge-green">✓ Yes</span></td>
+        </tr>
+        <tr>
+          <td><strong>Professional Services Sector</strong></td>
+          <td><code>/it-support-professional-services</code></td>
+          <td>Segment — accountants, solicitors, consultancies</td>
+          <td>IT Support Built for Professional Services — Where Data Security Isn't Optional</td>
+          <td><span class="tag tag-citrus">Get Sector Benchmark</span></td>
+          <td><span class="badge badge-green">✓ Yes</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Conversion Best Practices</h3>
+    <ul class="list-arrow">
+      <li>Above the fold: score visual showing SMB average at 2.35 vs "where could you be?" creates immediate curiosity</li>
+      <li>Social proof: 3 client logos + average score improvement stat ("clients improve by +1.4 in 12 months")</li>
+      <li>Risk framing: "Most businesses at this level have elevated exposure in these 3 areas" — shows what you'll discover</li>
+      <li>No site navigation: all landing pages strip nav to reduce exit points</li>
+      <li>Mobile-first: assessment must work perfectly on mobile — MDs often complete it on their phone</li>
+      <li>Exit intent pop-up: "85% of businesses discover at least one critical gap they didn't know about"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5 — PPC
+══════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">PPC Campaign Strategy</div>
+  </div>
+  <div class="section-body">
+
+    <div class="callout callout-warning">
+      <div class="callout-title">Total recommended monthly budget: £2,700</div>
+      Priority order when scaling: Cyber intent search → Managed IT search → LinkedIn MD/FD → Retargeting → Brand defence. Scale what converts — don't split budget evenly until you have data.
+    </div>
+
+    <table>
+      <thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Destination</th><th>Top Keywords / Targeting</th><th>Ad Copy Angles</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Cyber Security Risk Intent</strong></td>
+          <td><span class="badge badge-blue">Google Search</span></td>
+          <td>£600/mo</td>
+          <td>Lite Assessment page</td>
+          <td>cyber security for small business UK · IT security audit · cybersecurity assessment UK · how to improve cyber security</td>
+          <td>"Find Out Your Cyber Risk Score — Free 10-Min Assessment" · "Most SMBs Score 2.3 — Where Does Your Business Stand?"</td>
+        </tr>
+        <tr>
+          <td><strong>Ransomware / Breach Fear</strong></td>
+          <td><span class="badge badge-blue">Google Search</span></td>
+          <td>£400/mo</td>
+          <td>Lite Assessment page</td>
+          <td>protect business from ransomware · ransomware protection UK · business continuity plan · backup disaster recovery UK</td>
+          <td>"Ransomware Hits SMBs Every 11 Seconds — Is Your Business Ready?" · "Get Your Free Resilience Score Before the Next Attack"</td>
+        </tr>
+        <tr>
+          <td><strong>Managed IT Active Search</strong></td>
+          <td><span class="badge badge-blue">Google Search</span></td>
+          <td>£500/mo</td>
+          <td>Managed IT resilience page</td>
+          <td>managed IT support UK · IT support for small business · outsourced IT · MSP UK</td>
+          <td>"Managed IT With a Measurable Outcome — Your Score Improves or We Fix It Free" · "More Than IT Support — We Move Your Resilience Score"</td>
+        </tr>
+        <tr>
+          <td><strong>LinkedIn MD/FD Audience</strong></td>
+          <td><span class="badge badge-purple">LinkedIn</span></td>
+          <td>£800/mo</td>
+          <td>Lite Assessment / Lead Gen Form</td>
+          <td>Company size: 11–250 · Job titles: MD, FD, CEO · UK geography · Exclude: IT sector</td>
+          <td>"Most businesses your size score 2.3. Here's what that means for your risk." · "Get your free Technology Resilience Score™ — instant results, no obligation"</td>
+        </tr>
+        <tr>
+          <td><strong>Retargeting</strong></td>
+          <td><span class="badge badge-ink">Google + LinkedIn</span></td>
+          <td>£200/mo</td>
+          <td>Lite Assessment page</td>
+          <td>Blog visitors · Service page visitors · Abandoned mid-assessment</td>
+          <td>"You've been thinking about it — take the free assessment (10 mins)" · "Your Technology Resilience Score is waiting"</td>
+        </tr>
+        <tr>
+          <td><strong>Brand Defence</strong></td>
+          <td><span class="badge badge-blue">Google Search</span></td>
+          <td>£200/mo</td>
+          <td>Homepage / Lite Assessment</td>
+          <td>LittleBigTech · Little Big Tech IT · LBT managed IT</td>
+          <td>Protect brand SERP from MSP aggregator sites. Always-on.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Conversion Tracking Setup</h3>
+    <table>
+      <thead><tr><th>Event</th><th>Platform</th><th>Assigned Value</th></tr></thead>
+      <tbody>
+        <tr><td>Lite Assessment submitted</td><td>Google Ads + LinkedIn</td><td>£50</td></tr>
+        <tr><td>Discovery call booked (post-Lite)</td><td>Google Ads + LinkedIn</td><td>£200</td></tr>
+        <tr><td>Paid Assessment purchased</td><td>Google Ads</td><td>£[assessment fee]</td></tr>
+        <tr><td>Managed service proposal sent</td><td>CRM offline conversion</td><td>£[ARR value]</td></tr>
+        <tr><td>Managed service signed</td><td>CRM offline conversion</td><td>£[ARR × 0.5]</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 6 — SALES PLAYBOOK
+══════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div class="section-title">Sales Playbook &amp; Talk Tracks</div>
+  </div>
+  <div class="section-body">
+
+    <h3>Score-Based Urgency Matrix</h3>
+    <table>
+      <thead><tr><th>Score</th><th>Band</th><th>Sales Message</th><th>Urgency</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1.0–1.9</strong></td><td><span class="badge badge-red">Initial</span></td><td>Your current position presents critical operational risk. Phase 1 addresses immediate exposure — this is not something to defer.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td><strong>2.0–2.9</strong></td><td><span class="badge badge-red">Developing</span></td><td>Most organisations your size operate at 3.5+. Your current score of [X] presents elevated operational risk and a clear opportunity to strengthen your resilience.</td><td><span class="tag tag-red">HIGH</span></td></tr>
+        <tr><td><strong>3.0–3.4</strong></td><td><span class="badge badge-amber">Defined</span></td><td>Your score of [X] shows a solid foundation. The opportunity now is to close the remaining gaps and achieve the Managed baseline.</td><td><span class="tag tag-amber">MODERATE</span></td></tr>
+        <tr><td><strong>3.5–4.4</strong></td><td><span class="badge badge-green">Managed</span></td><td>Your score of [X] places you ahead of most. The path to Optimised — and full compliance framework readiness — is clear and achievable.</td><td><span class="tag tag-green">LOW — GROWTH</span></td></tr>
+        <tr><td><strong>4.5–5.0</strong></td><td><span class="badge badge-green">Optimised</span></td><td>Your Technology Resilience Score reflects exemplary posture. Our focus is maintaining this standard and demonstrating it to your stakeholders.</td><td><span class="tag tag-blue">RETENTION</span></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+    <h3>Stage 1 — Lite Assessment Follow-Up Call</h3>
+    <div class="callout callout-sky"><strong>Trigger:</strong> Prospect completes Lite Assessment on website &nbsp;|&nbsp; <strong>Goal:</strong> Book a 30-minute call within 24 hours &nbsp;|&nbsp; <strong>Target:</strong> Same day if possible</div>
+
+    <h4>Opening Line</h4>
+    <div class="talk-track">
+      <div class="talk-label">Opening</div>
+      "Hi [Name], I've had a look at your Technology Resilience Score from your assessment — you came in at [X.X], and I wanted to pick up the phone because there are a couple of things in there that I think are worth a conversation."
+    </div>
+
+    <h4>Bridge to Risk</h4>
+    <div class="talk-track">
+      <div class="talk-label">Bridge</div>
+      "Most organisations of your size in [sector] operate at around 3.5. Your score of [X.X] is below that benchmark — particularly in [top 2 domains]. That's not unusual, but it does mean there are some specific areas where your exposure is higher than it needs to be."
+    </div>
+
+    <h4>Call to Action</h4>
+    <div class="talk-track">
+      <div class="talk-label">CTA</div>
+      "What I'd love to do is spend 30 minutes walking you through the detail — not a sales pitch, just an honest look at what the numbers mean for your business and what good would look like. Would [day/time] work?"
+    </div>
+
+    <h4>Objection Handling</h4>
+    <div class="objection"><div class="objection-q">❓ "We already have IT support"</div><div class="objection-a">"That's great — this isn't about replacing your IT team, it's about having an independent baseline. Even well-supported businesses often have blind spots. Your score can tell us whether the investment you're making is delivering the resilience you need."</div></div>
+    <div class="objection"><div class="objection-q">❓ "We've not had any problems"</div><div class="objection-a">"That's the most common thing we hear from businesses before an incident. The average dwell time for an attacker is 207 days — the problem often exists long before it's visible. This assessment gives you a view before something goes wrong, not after."</div></div>
+    <div class="objection"><div class="objection-q">❓ "We can't afford it right now"</div><div class="objection-a">"I understand — the assessment is actually the affordable part. It's designed to show you where the highest-impact, lowest-cost improvements are. We typically find businesses are spending money in the wrong places and missing the areas that carry the most risk."</div></div>
+
+    <hr class="divider">
+    <h3>Stage 2 — Paid Assessment Debrief</h3>
+    <div class="callout callout-sky"><strong>Trigger:</strong> Consultant-led assessment completed, report prepared &nbsp;|&nbsp; <strong>Goal:</strong> Present findings, create urgency, propose managed service</div>
+
+    <h4>Framing the Session</h4>
+    <div class="talk-track"><div class="talk-label">Opening Frame</div>"The purpose of today's call is simple: to give you a clear picture of where your business sits from a technology resilience perspective — not in jargon, but in terms of what it means for your operations, your growth, and your risk exposure."</div>
+
+    <h4>Presenting the Score</h4>
+    <div class="talk-track"><div class="talk-label">Score Presentation</div>"Your Technology Resilience Score is [X.X] — that places you in the [band] band. To give you context, most organisations of your size operate at 3.5+. Your current position presents [elevated / significant] operational risk, particularly in [domain 1] and [domain 2]."</div>
+
+    <h4>Risk Register Walk-Through</h4>
+    <div class="talk-track"><div class="talk-label">Risk Walk-Through</div>"I want to walk you through the three areas we're most focused on. [Domain 1]: your score here is being impacted by [issue], which increases the likelihood of [specific business risk]. [Domain 2]: [same structure]. These aren't hypothetical — they're the areas that cause the most common incidents for businesses at your stage."</div>
+
+    <h4>The Trajectory Sell</h4>
+    <div class="talk-track"><div class="talk-label">Trajectory</div>"Here's what I want to show you — this is your score trajectory. With the right programme in place, we can move your score from [X.X] today to [Y.Y] by month 3 — that's the risk stabilisation threshold. By month 12, we'd be targeting [Z.Z] — the level that satisfies most insurers, enterprise clients, and compliance frameworks."</div>
+
+    <h4>Closing to Proposal</h4>
+    <div class="talk-track"><div class="talk-label">Close to Proposal</div>"I'd like to put together a formal proposal — it'll include a phased roadmap, your target score at each stage, a risk register you can take to your board, and the investment required. Can I get that to you by [date]?"</div>
+
+    <div class="objection"><div class="objection-q">❓ "I need to speak to my board/partner"</div><div class="objection-a">"Absolutely — the proposal is designed specifically to be board-ready. It includes an executive summary, the risk register, and a clear ROI case. I can prepare a one-page version for the board if that's helpful."</div></div>
+    <div class="objection"><div class="objection-q">❓ "Can we just fix the top issues and not take a full service?"</div><div class="objection-a">"We can absolutely prioritise — and Phase 1 is structured exactly that way. The full managed service gives you the ongoing score improvement and QBR reporting, but we can start with a project scope and revisit the broader programme once you've seen the impact."</div></div>
+
+    <hr class="divider">
+    <h3>Stage 3 — Proposal &amp; Close</h3>
+    <div class="callout callout-sky"><strong>Trigger:</strong> ConnectWise Sell proposal sent &nbsp;|&nbsp; <strong>Goal:</strong> Sign SOW and confirm onboarding start date</div>
+
+    <h4>Phasing Language</h4>
+    <div class="talk-track"><div class="talk-label">Phasing</div>"Phase 1 is focused on lifting your score above 3.0 — the risk stabilisation threshold. That's the level where you've closed the gaps that cause the most common incidents. We'll achieve that within the first 90 days. Phase 2 moves you to Managed — 4.0 — which satisfies most insurers and enterprise client requirements."</div>
+
+    <h4>ROI Framing</h4>
+    <div class="talk-track"><div class="talk-label">ROI</div>"The average cost of a ransomware incident for a business of your size is £47,000 in downtime alone — before any ransom, recovery costs, or reputational damage. The investment in this programme is [X] per month. That's a [Y×] risk-adjusted return even if we only prevent one incident over the contract period."</div>
+
+    <h4>Creating Urgency</h4>
+    <div class="talk-track"><div class="talk-label">Urgency</div>"The risk register we've built is live today. Those gaps exist right now. Every week we delay Phase 1 is a week of elevated exposure. I'd like to get onboarding started by [date] — can we confirm sign-off this week?"</div>
+
+    <div class="objection"><div class="objection-q">❓ "It's too expensive"</div><div class="objection-a">"Let's look at what you're currently spending on IT and what it's delivering in resilience terms. Often we find the total investment is similar — we're just redirecting it toward the highest-impact controls. The difference is a measurable score improvement and a defensible posture."</div></div>
+    <div class="objection"><div class="objection-q">❓ "We want to get another quote"</div><div class="objection-a">"Of course — I'd encourage that. When you're comparing, ask the other provider how they'll measure improvement over time and what your resilience score will be at month 3, 12, and 24. Most won't have an answer. We do."</div></div>
+
+    <hr class="divider">
+    <h3>Stage 4 — QBR &amp; Expansion</h3>
+    <div class="callout callout-sky"><strong>Trigger:</strong> Client at 90-day, 6-month, or annual review &nbsp;|&nbsp; <strong>Goal:</strong> Demonstrate progress, renew, identify upsell</div>
+
+    <div class="talk-track"><div class="talk-label">QBR Opening</div>"The purpose of today's QBR is to show you the measurable progress we've made against your Technology Resilience Score — and to agree the priorities for the next quarter."</div>
+    <div class="talk-track"><div class="talk-label">Progress Narrative</div>"Your score has improved from [X.X] to [Y.Y] — that's a [Z] point improvement that reflects meaningful progress in your operational resilience. Specifically, we've closed [N] critical gaps, moved your [domain] score from [A] to [B], and eliminated [specific risk] from your risk register."</div>
+    <div class="talk-track"><div class="talk-label">Next Phase Sell</div>"You're now operating at the risk stabilisation threshold. The next phase of your programme is focused on moving you to the Managed baseline — 4.0 — which opens doors with insurers, enterprise clients, and compliance frameworks. Here's what that looks like over the next 12 months."</div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 7 — EMAIL SEQUENCES
+══════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div class="section-title">Email Sequences</div>
+  </div>
+  <div class="section-body">
+
+    <div class="callout callout-info">All sequences triggered automatically via Rewst / HubSpot. Score data personalised using LBT custom fields written on assessment completion. Sequence enrolment and unenrolment managed via HubSpot workflows.</div>
+
+    <h3>Sequence 1 — Post-Lite Assessment (Prospect)</h3>
+    <div class="callout callout-sky" style="margin-bottom:12px;"><strong>Trigger:</strong> Lite Assessment submitted on website</div>
+
+    <div style="margin-bottom:10px;">
+      <div class="email-day">Day 0</div>
+      <div class="email-box"><div class="email-subject">Subject: Your Technology Resilience Score™ — [X.X]</div>Your score is [X.X] — placing you in the [band] band. The SMB benchmark is 3.5. Your highest-impact gaps are in [domain 1] ([score]) and [domain 2] ([score]).
+
+This isn't just a number — it's a measure of your operational risk. I'd like to walk you through what it means for your business in a 30-minute call.
+
+[Book a time: Calendly link]</div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <div class="email-day">Day 2</div>
+      <div class="email-box"><div class="email-subject">Subject: What your [X.X] score means in practice</div>Quick follow-up on your Technology Resilience Score™.
+
+Most businesses at [X.X] have elevated exposure in two or three specific areas that cause the majority of real-world incidents — downtime, credential theft, data loss.
+
+I've identified three priorities for [Company Name] based on your assessment. Worth 20 minutes?
+
+[Book here]</div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <div class="email-day">Day 7</div>
+      <div class="email-box"><div class="email-subject">Subject: One thing that could change your resilience posture quickly</div>I've been thinking about your assessment. The single highest-impact thing most businesses at your score level can do is [specific control — e.g., enforce MFA across all applications].
+
+It's not complex, not expensive, and it closes the gap that causes the most common incident type for businesses of your size.
+
+If you'd like to understand your full picture — not just the quick wins — a full assessment gives you a verified score, a risk register, and a 24-month trajectory.
+
+[Explore the Paid Assessment]</div>
+    </div>
+
+    <h3>Sequence 2 — Post-Paid Assessment Debrief</h3>
+    <div class="callout callout-sky" style="margin-bottom:12px;"><strong>Trigger:</strong> Paid Assessment debrief call completed</div>
+
+    <div style="margin-bottom:10px;">
+      <div class="email-day">Day 0</div>
+      <div class="email-box"><div class="email-subject">Subject: Your Technology Resilience Roadmap — as discussed</div>As discussed today, here's a summary of your position:
+
+Current Score: [X.X] ([band])
+Target Score: [Y.Y] by Month 3 / [Z.Z] by Month 12
+Top 3 Gaps: [risk 1], [risk 2], [risk 3]
+
+Your proposal is being prepared and will be with you by [date]. It includes your full risk register, phased roadmap, and investment summary.
+
+In the meantime — is there anything from today's session you'd like me to clarify?</div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <div class="email-day">Day 3</div>
+      <div class="email-box"><div class="email-subject">Subject: Your proposal — [Company Name] Technology Resilience Programme</div>Your proposal is attached. It covers:
+
+• Phase 1: Risk Stabilisation (Score → [Y.Y] in 90 days)
+• Phase 2: Managed Baseline (Score → [Z.Z] in 12 months)
+• Full risk register with mitigations
+• Investment summary
+
+I'm available [day/time] to walk through it together. [Book here]</div>
+    </div>
+
+    <h3>Sequence 3 — Client QBR Prep</h3>
+    <div class="callout callout-sky" style="margin-bottom:12px;"><strong>Trigger:</strong> 30 days before scheduled QBR date</div>
+
+    <div style="margin-bottom:10px;">
+      <div class="email-day">Day 0</div>
+      <div class="email-box"><div class="email-subject">Subject: Your Technology Resilience Score Update — [Month] QBR</div>Your quarterly Technology Resilience update is coming up on [date].
+
+Since your last assessment, here's where you stand:
+
+Current Score: [X.X] (up from [prev])
+Key improvements: [domain movement summary]
+Next priorities: [Phase 2 areas]
+
+Full scorecard and updated risk register will be presented at the QBR. See you [date/time].</div>
+    </div>
+
+    <h3>Automation Notes (Rewst / HubSpot)</h3>
+    <ul class="list-arrow">
+      <li>Lite Assessment submission → HubSpot contact created → Sequence 1 enrolled automatically</li>
+      <li>Paid Assessment booked → HubSpot deal created → Rep assigned → Sequence 2 on debrief completion</li>
+      <li>Managed service signed → ConnectWise client created → QBR sequence starts at Day 60</li>
+      <li>All email copy personalised using <code>LBT_Score_Overall</code>, <code>LBT_Top_Risks</code>, and <code>LBT_Score_Band</code> HubSpot fields</li>
+      <li>All Calendly links pass UTM parameters back to HubSpot for attribution reporting</li>
+    </ul>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 8 — ENABLEMENT
+══════════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div class="section-title">Sales Enablement Assets</div>
+  </div>
+  <div class="section-body">
+
+    <div class="card" style="border-left:4px solid var(--citrus); margin-bottom:12px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px;">
+        <div class="card-title">📄 Technology Resilience Score™ One-Pager</div>
+        <span class="tag tag-citrus">DESIGN REQUIRED</span>
+      </div>
+      <div class="card-body">Leave-behind for networking, referral conversations, and post-discovery follow-up.</div>
+      <ul class="list-arrow" style="margin-top:8px;">
+        <li>Score scale visual (1–5 with labels and colour coding)</li>
+        <li>"Most SMBs score 2.35" benchmark stat, prominently placed</li>
+        <li>Top 3 risks caused by a low score</li>
+        <li>3-step process: Assess → Roadmap → Improve</li>
+        <li>Website URL and assessment CTA</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--purple); margin-bottom:12px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px;">
+        <div class="card-title">📊 UK SMB Technology Resilience Report (Annual)</div>
+        <span class="tag tag-purple">ANNUAL ASSET</span>
+      </div>
+      <div class="card-body">Thought leadership and PR asset built from aggregated anonymised assessment data. Gated behind email capture on the website. Plan for Q4 2026.</div>
+      <ul class="list-arrow" style="margin-top:8px;">
+        <li>Average score by sector (professional services, retail, manufacturing, etc.)</li>
+        <li>Average score by company size band</li>
+        <li>Top 5 most common critical gaps</li>
+        <li>Year-on-year trend (once data exists)</li>
+        <li>Downloadable PDF gated behind email form</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--green); margin-bottom:12px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px;">
+        <div class="card-title">📖 Case Study Template: "From [X] to [Y] in [Z] Days"</div>
+        <span class="tag tag-green">FIRST CASE STUDY NEEDED NOW</span>
+      </div>
+      <div class="card-body">Standardised format using score language. Sales team must capture score before and after for every client. Identify a willing client immediately.</div>
+      <ul class="list-arrow" style="margin-top:8px;">
+        <li>Client: sector, size, initial score, maturity band</li>
+        <li>Challenge: what the score was telling us</li>
+        <li>Action: Phase 1 priorities, LBT services deployed</li>
+        <li>Result: score at Month 3 and Month 12, specific risks closed</li>
+        <li>Quote: business-language outcome from MD or FD</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--blue); margin-bottom:12px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px;">
+        <div class="card-title">💼 LinkedIn Playbook for Consultants</div>
+        <span class="tag tag-blue">TEAM BEHAVIOUR</span>
+      </div>
+      <div class="card-body">How every LBT consultant builds personal brand around the Technology Resilience Score™. Minimum: 2 posts per week, 10 comments per week.</div>
+      <ul class="list-arrow" style="margin-top:8px;">
+        <li>Post template: "I assessed a business this week at [X.X]. Here's what that means for their operational risk."</li>
+        <li>Post template: "Most SMBs believe [myth]. Here's the reality of what I see when I assess businesses of your size."</li>
+        <li>Connection strategy: target MDs, FDs at 20–200 staff within 30 miles with personalised note</li>
+        <li>Weekly engagement: comment on MD/FD posts about IT, cyber, insurance</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--amber); margin-bottom:12px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px;">
+        <div class="card-title">🤝 Referral Partner Pack</div>
+        <span class="tag tag-amber">DISTRIBUTE TO 10 FIRMS IN 90 DAYS</span>
+      </div>
+      <div class="card-body">Accountants, solicitors, and insurers are the highest-quality referral channel — they have existing client trust and talk to the same decision-makers.</div>
+      <ul class="list-arrow" style="margin-top:8px;">
+        <li>1-page explainer: "What is a Technology Resilience Score?"</li>
+        <li>Referral submission form + reward structure (to be confirmed)</li>
+        <li>Talking point: "Ask your clients if they know their technology resilience score"</li>
+        <li>Co-branded materials option for trusted partners</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 9 — LAUNCH PLAN
+══════════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div class="section-title">90-Day Launch Plan</div>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead><tr><th>Week</th><th>Action</th><th>Owner</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1–2</strong></td><td>Publish Lite Assessment on website + configure Rewst automation end-to-end</td><td>Dev + Ops</td><td>Live assessment → email → HubSpot pipeline flowing</td></tr>
+        <tr><td><strong>1–2</strong></td><td>Build core 5 landing pages with GA4 + conversion tracking configured</td><td>Marketing</td><td>5 pages live, all events firing in GA4</td></tr>
+        <tr><td><strong>3</strong></td><td>Launch Brand Defence + Cyber Intent PPC campaigns on Google</td><td>Marketing</td><td>Google Ads live at £800/month initial</td></tr>
+        <tr><td><strong>3–4</strong></td><td>Publish first 4 blog articles (Cyber Security + IAM domains)</td><td>Marketing</td><td>4 articles indexed, internal linking done</td></tr>
+        <tr><td><strong>4</strong></td><td>Train all reps on Score talk tracks and objection handling</td><td>Sales Lead</td><td>All reps can deliver Stage 1–3 pitch from memory</td></tr>
+        <tr><td><strong>5–6</strong></td><td>Launch LinkedIn Sponsored Content + Lead Gen Form campaign</td><td>Marketing</td><td>LinkedIn ads live, Lead Gen Forms configured and tested</td></tr>
+        <tr><td><strong>6</strong></td><td>Publish first case study (existing client, with permission)</td><td>Marketing</td><td>Case study live on website and shared on LinkedIn</td></tr>
+        <tr><td><strong>7–8</strong></td><td>Publish BCDR + Monitoring blog articles (8 articles total on site)</td><td>Marketing</td><td>8 articles live, retargeting audience building</td></tr>
+        <tr><td><strong>8</strong></td><td>Distribute referral partner pack to 10 local accountancy firms</td><td>Sales</td><td>10 partner conversations initiated</td></tr>
+        <tr><td><strong>10–12</strong></td><td>Review: conversion rates, CPL, Lite→Paid rate, close rate — optimise or scale</td><td>Leadership</td><td>Data-driven decision on budget allocation Month 4+</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 10 — METRICS
+══════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div class="section-title">Key Metrics &amp; Targets</div>
+  </div>
+  <div class="section-body">
+
+    <div class="grid-4" style="margin-bottom:16px;">
+      <div class="stat-card" style="border-top:3px solid var(--citrus);">
+        <div class="stat-label">Lite Completions</div>
+        <div class="stat-value" style="color:var(--citrus);">30/mo</div>
+        <div style="font-size:11px; color:var(--ink50); margin-top:3px;">by Month 3</div>
+      </div>
+      <div class="stat-card" style="border-top:3px solid var(--purple);">
+        <div class="stat-label">Lite → Discovery Call</div>
+        <div class="stat-value" style="color:var(--purple);">25%</div>
+        <div style="font-size:11px; color:var(--ink50); margin-top:3px;">conversion rate</div>
+      </div>
+      <div class="stat-card" style="border-top:3px solid var(--green);">
+        <div class="stat-label">Paid → Managed Proposal</div>
+        <div class="stat-value" style="color:var(--green);">60%</div>
+        <div style="font-size:11px; color:var(--ink50); margin-top:3px;">conversion rate</div>
+      </div>
+      <div class="stat-card" style="border-top:3px solid var(--blue);">
+        <div class="stat-label">Score Improvement</div>
+        <div class="stat-value" style="color:var(--blue);">+1.4</div>
+        <div style="font-size:11px; color:var(--ink50); margin-top:3px;">avg in 12 months</div>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>Metric</th><th>Target</th><th>Measurement Tool</th></tr></thead>
+      <tbody>
+        <tr><td>Lite Assessment completions</td><td>30/month by Month 3</td><td>GA4 + HubSpot</td></tr>
+        <tr><td>Lite → Discovery call booked</td><td>25%</td><td>HubSpot pipeline</td></tr>
+        <tr><td>Discovery call → Paid Assessment</td><td>50%</td><td>HubSpot pipeline</td></tr>
+        <tr><td>Paid Assessment → Managed Service proposal</td><td>60%</td><td>ConnectWise Sell</td></tr>
+        <tr><td>Proposal → Close</td><td>40%</td><td>ConnectWise Sell</td></tr>
+        <tr><td>Avg score improvement at 12 months</td><td>+1.4</td><td>BrightGauge / CW custom fields</td></tr>
+        <tr><td>Client churn rate</td><td>&lt;5% annually</td><td>ConnectWise</td></tr>
+        <tr><td>Cost per Lite Assessment lead</td><td>&lt;£40</td><td>Google Ads + LinkedIn</td></tr>
+        <tr><td>Cost per managed service close</td><td>&lt;£1,500</td><td>CRM attribution</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  LBT Sales &amp; Marketing Plan · Technology Resilience Score™ · Internal use only — not for client distribution · littlebigtech.co.uk · Review: September 2026
+</div>
+
+</body>
+</html>
