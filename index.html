@@ -1,1 +1,1061 @@
-<html>Hello World</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LBT Knowledge Base — Assessment & QBR Guides</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f8fafc; color:#1e293b; font-size:14px; line-height:1.6; }
+
+  /* ── LAYOUT ── */
+  .sidebar { position:fixed; left:0; top:0; bottom:0; width:260px; background:#1e293b; overflow-y:auto; z-index:10; }
+  .main { margin-left:260px; padding:0; }
+
+  /* ── SIDEBAR ── */
+  .sidebar-header { padding:20px 18px 14px; border-bottom:1px solid #334155; }
+  .sidebar-logo { font-weight:900; font-size:15px; color:#fff; letter-spacing:-0.5px; }
+  .sidebar-logo span { color:#f97316; }
+  .sidebar-subtitle { font-size:10px; color:#64748b; margin-top:3px; letter-spacing:0.5px; text-transform:uppercase; }
+  .sidebar-section { padding:12px 18px 4px; font-size:10px; font-weight:700; color:#475569; letter-spacing:1px; text-transform:uppercase; }
+  .sidebar-link { display:block; padding:8px 18px; font-size:13px; color:#94a3b8; text-decoration:none; cursor:pointer; border-left:3px solid transparent; transition:all .15s; }
+  .sidebar-link:hover { color:#f1f5f9; background:rgba(255,255,255,0.04); }
+  .sidebar-link.active { color:#06b6d4; border-left-color:#06b6d4; background:rgba(6,182,212,0.08); font-weight:600; }
+  .sidebar-link.sub { padding-left:30px; font-size:12px; }
+  .guide-badge { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:700; margin-left:6px; }
+  .badge-paid { background:#06b6d422; color:#06b6d4; }
+  .badge-qbr { background:#f9731622; color:#f97316; }
+  .badge-both { background:#22c55e22; color:#22c55e; }
+
+  /* ── ARTICLE ── */
+  .article { display:none; max-width:820px; padding:40px 48px 80px; }
+  .article.active { display:block; }
+  .article-header { margin-bottom:32px; padding-bottom:20px; border-bottom:2px solid #e2e8f0; }
+  .article-kicker { font-size:11px; font-weight:700; color:#f97316; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; }
+  .article-title { font-size:26px; font-weight:800; color:#09103a; line-height:1.2; margin-bottom:8px; }
+  .article-meta { font-size:12px; color:#94a3b8; display:flex; gap:16px; flex-wrap:wrap; }
+  .meta-item { display:flex; align-items:center; gap:5px; }
+
+  /* ── CONTENT TYPOGRAPHY ── */
+  h2 { font-size:18px; font-weight:700; color:#09103a; margin:28px 0 10px; padding-top:8px; border-top:1px solid #f1f5f9; }
+  h2:first-of-type { border-top:none; margin-top:0; }
+  h3 { font-size:14px; font-weight:700; color:#334155; margin:18px 0 8px; }
+  p { color:#475569; margin-bottom:12px; line-height:1.75; }
+  p + p { margin-top:-4px; }
+  strong { color:#1e293b; font-weight:600; }
+  ul, ol { padding-left:20px; margin-bottom:12px; color:#475569; }
+  li { margin-bottom:5px; line-height:1.65; }
+  li strong { color:#1e293b; }
+  code { background:#f1f5f9; color:#0f172a; padding:1px 6px; border-radius:4px; font-size:12px; font-family:monospace; border:1px solid #e2e8f0; }
+  a { color:#06b6d4; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+
+  /* ── CALLOUTS ── */
+  .callout { border-radius:8px; padding:14px 16px; margin:16px 0; display:flex; gap:12px; }
+  .callout-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+  .callout-body { flex:1; }
+  .callout-title { font-weight:700; font-size:13px; margin-bottom:4px; }
+  .callout-text { font-size:13px; line-height:1.65; margin:0; }
+  .callout.info { background:#eff6ff; border:1px solid #bfdbfe; }
+  .callout.info .callout-title { color:#1d4ed8; }
+  .callout.info .callout-text { color:#1e40af; }
+  .callout.warning { background:#fffbeb; border:1px solid #fde68a; }
+  .callout.warning .callout-title { color:#d97706; }
+  .callout.warning .callout-text { color:#92400e; }
+  .callout.danger { background:#fef2f2; border:1px solid #fecaca; }
+  .callout.danger .callout-title { color:#dc2626; }
+  .callout.danger .callout-text { color:#991b1b; }
+  .callout.success { background:#f0fdf4; border:1px solid #bbf7d0; }
+  .callout.success .callout-title { color:#16a34a; }
+  .callout.success .callout-text { color:#14532d; }
+  .callout.tip { background:#faf5ff; border:1px solid #e9d5ff; }
+  .callout.tip .callout-title { color:#7c3aed; }
+  .callout.tip .callout-text { color:#4c1d95; }
+
+  /* ── STEP BOXES ── */
+  .steps { margin:16px 0; }
+  .step { display:flex; gap:14px; margin-bottom:12px; }
+  .step-num { width:28px; height:28px; border-radius:8px; background:#09103a; color:#f97316; font-weight:900; font-size:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+  .step-content { flex:1; }
+  .step-title { font-weight:700; color:#1e293b; font-size:14px; margin-bottom:3px; }
+  .step-body { color:#475569; font-size:13px; line-height:1.65; }
+
+  /* ── TABLES ── */
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:13px; }
+  thead tr { background:#09103a; }
+  thead th { padding:9px 12px; text-align:left; color:#8899cc; font-weight:700; font-size:11px; }
+  tbody tr:nth-child(odd) { background:#f8fafc; }
+  tbody tr:nth-child(even) { background:#fff; }
+  td { padding:9px 12px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569; line-height:1.5; }
+  td strong { color:#1e293b; }
+  td:first-child { font-weight:600; color:#1e293b; }
+
+  /* ── SCORE BANDS ── */
+  .score-band { display:inline-flex; align-items:center; gap:6px; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+  .band-1 { background:#fee2e2; color:#dc2626; }
+  .band-2 { background:#fef3c7; color:#d97706; }
+  .band-3 { background:#fef9c3; color:#ca8a04; }
+  .band-4 { background:#dcfce7; color:#16a34a; }
+  .band-5 { background:#d1fae5; color:#065f46; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style:none; padding:0; margin:12px 0; }
+  .checklist li { display:flex; gap:10px; padding:7px 10px; border-radius:6px; margin-bottom:4px; font-size:13px; color:#475569; background:#f8fafc; border:1px solid #e2e8f0; }
+  .checklist li::before { content:"☐"; font-size:14px; color:#94a3b8; flex-shrink:0; margin-top:1px; }
+  .checklist li.done::before { content:"✅"; }
+
+  /* ── TOC ── */
+  .toc { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px 20px; margin:0 0 24px; }
+  .toc-title { font-size:12px; font-weight:700; color:#64748b; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:8px; }
+  .toc ul { padding-left:0; list-style:none; margin:0; columns:2; column-gap:20px; }
+  .toc li { margin-bottom:4px; font-size:13px; break-inside:avoid; }
+  .toc a { color:#475569; }
+  .toc a:hover { color:#06b6d4; }
+
+  /* ── SCORE PILL ── */
+  .score-pill { display:inline-block; padding:1px 8px; border-radius:4px; font-size:12px; font-weight:700; font-family:monospace; }
+
+  /* ── DIVIDER ── */
+  .divider { border:none; border-top:2px solid #f1f5f9; margin:28px 0; }
+
+  /* ── PRINT ── */
+  @media print {
+    .sidebar { display:none; }
+    .main { margin-left:0; }
+    .article { display:block !important; max-width:100%; }
+    .article + .article { page-break-before:always; }
+    body { font-size:11pt; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────────────────────────────────── -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">little<span>big</span>tech</div>
+    <div class="sidebar-subtitle">Internal Knowledge Base</div>
+  </div>
+
+  <div class="sidebar-section">Paid Assessment</div>
+  <a class="sidebar-link active" onclick="show('paid-overview')">Overview & Purpose</a>
+  <a class="sidebar-link sub" onclick="show('paid-setup')">Before the Session</a>
+  <a class="sidebar-link sub" onclick="show('paid-conduct')">Running the Session</a>
+  <a class="sidebar-link sub" onclick="show('paid-scoring')">Scoring in the Tool</a>
+  <a class="sidebar-link sub" onclick="show('paid-optouts')">Opt-Outs & Exceptions</a>
+  <a class="sidebar-link sub" onclick="show('paid-platforms')">Platform Differences</a>
+  <a class="sidebar-link sub" onclick="show('paid-evidence')">Evidence Capture</a>
+  <a class="sidebar-link sub" onclick="show('paid-report')">Generating the Report</a>
+  <a class="sidebar-link sub" onclick="show('paid-after')">After the Session</a>
+
+  <div class="sidebar-section">QBR Mode</div>
+  <a class="sidebar-link" onclick="show('qbr-overview')">Overview & Purpose</a>
+  <a class="sidebar-link sub" onclick="show('qbr-prep')">Preparing the QBR</a>
+  <a class="sidebar-link sub" onclick="show('qbr-priorities')">Setting Client Priorities</a>
+  <a class="sidebar-link sub" onclick="show('qbr-actions')">Action Plan Engine</a>
+  <a class="sidebar-link sub" onclick="show('qbr-meeting')">Running the Meeting</a>
+  <a class="sidebar-link sub" onclick="show('qbr-report')">QBR Report Output</a>
+  <a class="sidebar-link sub" onclick="show('qbr-after')">After the QBR</a>
+
+  <div class="sidebar-section">Reference</div>
+  <a class="sidebar-link" onclick="show('ref-scores')">Score Scale Reference</a>
+  <a class="sidebar-link" onclick="show('ref-language')">Report Language Guide</a>
+  <a class="sidebar-link" onclick="show('ref-cw')">ConnectWise Field Reference</a>
+</div>
+
+<!-- ── MAIN CONTENT ──────────────────────────────────────────────────────────── -->
+<div class="main">
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — OVERVIEW
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-overview" class="article active">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Overview &amp; Commercial Purpose</div>
+    <div class="article-meta">
+      <span class="meta-item">📅 Created: March 2026</span>
+      <span class="meta-item">👤 Owner: Nick Haley</span>
+      <span class="meta-item">🔁 Review: September 2026</span>
+      <span class="meta-item"><span class="guide-badge badge-paid">Paid Assessment</span></span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ul>
+      <li><a href="#">What the paid assessment is</a></li>
+      <li><a href="#">How it fits the commercial workflow</a></li>
+      <li><a href="#">Who can run it</a></li>
+      <li><a href="#">What it produces</a></li>
+      <li><a href="#">The three assessment tiers</a></li>
+    </ul>
+  </div>
+
+  <h2>What the paid assessment is</h2>
+  <p>The LBT paid assessment is a structured, evidence-based review of a client or prospect's technology and cyber security environment. It is conducted by a trained LBT consultant over a 3–4 hour session, with direct access to the client's admin consoles, policies, and documentation.</p>
+  <p>It produces a <strong>Technology Resilience Score™</strong> — a single number between 1.0 and 5.0 — across ten domains, based on what the consultant actually observed, not what the client told us. Every score above 2 requires observable evidence gathered during the session.</p>
+
+  <div class="callout info">
+    <div class="callout-icon">ℹ️</div>
+    <div class="callout-body">
+      <div class="callout-title">Key distinction: verified, not self-reported</div>
+      <p class="callout-text">The paid assessment is fundamentally different from the lite (self-service) assessment. Lite scores are what the client thinks they have. Paid scores are what we can evidence they actually have. Only paid and ongoing assessment scores are written to ConnectWise company custom fields.</p>
+    </div>
+  </div>
+
+  <h2>How it fits the commercial workflow</h2>
+  <table>
+    <thead><tr><th>Stage</th><th>Tool</th><th>Purpose</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>Lead generation</td><td>Lite assessment (website)</td><td>Prospect qualification</td><td>Score + email report + CRM lead</td></tr>
+      <tr><td><strong>Gap analysis</strong></td><td><strong>Paid assessment (this guide)</strong></td><td><strong>Evidence-based baseline</strong></td><td><strong>TRS™ + risk register + proposal foundation</strong></td></tr>
+      <tr><td>Retention &amp; upsell</td><td>QBR mode (delta)</td><td>Quarterly progress tracking</td><td>Score delta + updated action plan + QBR report</td></tr>
+    </tbody>
+  </table>
+  <p>The paid assessment is what LBT sells as a commercial engagement. It is the evidence base for the managed service proposal — the risk register, phased roadmap, and investment narrative in the proposal all pull directly from the assessment data via ConnectWise Sell tokens.</p>
+
+  <h2>Who can run it</h2>
+  <p>The paid assessment must be conducted by an LBT consultant who has read and understood the <strong>Consultant Scoring Playbook</strong>. For your first six assessments, a second consultant must peer-review the scores before the report is issued.</p>
+  <div class="callout warning">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Do not run a paid assessment without reading the scoring playbook first</div>
+      <p class="callout-text">Inconsistent scoring undermines the commercial credibility of the Technology Resilience Score™. An inflated score harms the client by understating risk and weakens the LBT proposal. When in doubt, score lower.</p>
+    </div>
+  </div>
+
+  <h2>What it produces</h2>
+  <ul>
+    <li>A Technology Resilience Score™ (overall and per domain)</li>
+    <li>A consultant-verified risk register with rated entries</li>
+    <li>A phased action roadmap (Phase 1 / 2 / 3) auto-generated from scores</li>
+    <li>A client-facing PDF report</li>
+    <li>Score data written to ConnectWise company custom fields (via Rewst)</li>
+    <li>A draft managed service proposal auto-populated in ConnectWise Sell</li>
+    <li>Sales team notification with score summary and top risks</li>
+  </ul>
+
+  <h2>The three assessment tiers at a glance</h2>
+  <table>
+    <thead><tr><th>Tier</th><th>Completed by</th><th>Duration</th><th>Writes to CW?</th><th>Proposal trigger?</th></tr></thead>
+    <tbody>
+      <tr><td>Lite</td><td>Client (self-service)</td><td>~15 min</td><td>❌ Never</td><td>No</td></tr>
+      <tr><td><strong>Paid</strong></td><td><strong>LBT consultant + client</strong></td><td><strong>3–4 hours</strong></td><td><strong>✅ Always</strong></td><td><strong>Yes — auto-triggers CW Sell draft</strong></td></tr>
+      <tr><td>Ongoing (QBR)</td><td>LBT consultant</td><td>~60 min</td><td>✅ Always</td><td>No</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — BEFORE THE SESSION
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-setup" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Before the Session</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>Pre-session checklist</h2>
+  <ul class="checklist">
+    <li>Read the Consultant Scoring Playbook (or re-read the Common Traps section as a refresher)</li>
+    <li>Review the client's lite assessment score if they completed one — note where self-reporting and observed evidence are likely to diverge</li>
+    <li>Create an evidence folder in SharePoint: <code>Clients / [Client Name] / Assessment / [YYYY-MM-DD]</code></li>
+    <li>Send the pre-session email to the client (template below)</li>
+    <li>Confirm screen-share or on-site access to M365 Admin / Google Admin is available</li>
+    <li>Confirm access to ConnectWise (if existing client)</li>
+    <li>Check which platform the client uses (M365 or Google Workspace) and set this in the tool Setup tab before the session</li>
+    <li>Open the assessment tool and complete the Client Setup tab before you start</li>
+    <li>Note the client's operating model (office / WFH / serviced / hybrid) — this drives opt-out suggestions</li>
+  </ul>
+
+  <h2>Pre-session email template</h2>
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin:12px 0;font-size:13px;color:#475569;line-height:1.75;">
+    <strong style="color:#1e293b">Subject:</strong> Technology Resilience Assessment — [Date] — what to have ready<br><br>
+    Hi [Contact Name],<br><br>
+    Looking forward to our assessment session on [date]. To make the most of our time together (roughly 3–4 hours), it would help to have the following ready:<br><br>
+    <strong style="color:#1e293b">Admin access we'll need:</strong>
+    <ul style="margin:8px 0 12px;padding-left:18px;">
+      <li>Microsoft 365 Admin Centre / Google Workspace Admin Console (Global Admin or equivalent)</li>
+      <li>Your email security platform admin portal (if separate from M365/Google)</li>
+      <li>Any security tooling dashboards (EDR, backup, etc.)</li>
+    </ul>
+    <strong style="color:#1e293b">Documents to have accessible:</strong>
+    <ul style="margin:8px 0 12px;padding-left:18px;">
+      <li>IT or security policies (acceptable use, password policy) if they exist</li>
+      <li>Any business continuity or backup documentation</li>
+      <li>Most recent backup report or restore test record</li>
+    </ul>
+    We'll be working through ten areas of your technology environment. I'll be asking to see configurations directly rather than relying on memory — this is how we make sure the output is accurate and genuinely useful. The session produces a verified Technology Resilience Score™ and a clear picture of where to invest to improve it.<br><br>
+    Any questions before we start, just reply to this email.<br><br>
+    [Consultant name] | Little Big Tech
+  </div>
+
+  <h2>Setting up the assessment tool</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Open the assessment tool</div><div class="step-body">Navigate to the LBT Assessment Tool. Select <strong>🔍 Paid Assessment</strong> from the mode bar.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Complete the Client Setup tab</div><div class="step-body">Enter client name, contact, sector, company size, and your name as consultant. Set the assessment date to today.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Set the platform</div><div class="step-body">Select <strong>🔷 Microsoft 365</strong>, <strong>🔴 Google Workspace</strong>, or <strong>⚡ Mixed</strong>. This gates platform-specific guidance and evidence checklists throughout the assessment.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Set the operating model</div><div class="step-body">Select office-based, serviced office, hybrid, 100% WFH, or co-location. Tick the infrastructure flags (on-prem servers, company mobiles, bespoke software). These drive the opt-out suggestions.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><div class="step-title">Review the opt-out pre-population summary</div><div class="step-body">The tool shows a plain-English summary of which controls will be suggested as N/A or Third-Party based on the client profile. Review this before starting the assessment.</div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — RUNNING THE SESSION
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-conduct" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Running the Session</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>Opening script — use this word for word</h2>
+  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-left:4px solid #0ea5e9;border-radius:8px;padding:16px 18px;margin:12px 0;">
+    <p style="color:#0c4a6e;font-style:italic;line-height:1.8;margin:0;">"Thanks for making time for this. What we're doing today is a structured, evidence-based review of your technology environment. I'll be asking questions across ten areas, and for most of them I'll want to see the actual configuration or documentation rather than relying on memory — that's not a reflection on you, it's just how we make sure the output is accurate and useful. At the end, you'll have a clear picture of where you are, what the risks are, and what a realistic improvement path looks like. Does that sound okay?"</p>
+  </div>
+
+  <h2>Session flow</h2>
+  <table>
+    <thead><tr><th>Time</th><th>Activity</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>0:00–0:15</td><td>Introduction and scene-setting</td><td>Use opening script. Explain the 10 domains briefly. Set expectation: 3–4 hours with a break.</td></tr>
+      <tr><td>0:15–2:30</td><td>Assessment — 10 domains</td><td>~10–15 min per domain. Use discovery question to open, then validate against what you can see.</td></tr>
+      <tr><td>2:30–2:45</td><td>Break / buffer time</td><td>Catch up on any domains that took longer. Complete evidence captures.</td></tr>
+      <tr><td>2:45–3:15</td><td>Summary review with client</td><td>Walk through the summary tab. Explain each domain score in plain language. Capture any pushback.</td></tr>
+      <tr><td>3:15–3:30</td><td>Provisional next steps</td><td>Frame the highest-priority areas. Do not commit to specific pricing. Agree timeline for report delivery (within 5 working days).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Per-domain workflow</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Read the discovery question — say it out loud, word for word</div><div class="step-body">The discovery question is designed to get the client talking in their own words. Do not paraphrase it. Expand the control in the Assessment tab to see it.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Work through technical validation</div><div class="step-body">The validation questions tell you what to check in the admin console. Ask the client to screen-share or navigate to the relevant section. You are verifying — not trusting.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Review the platform-specific guidance</div><div class="step-body">If you set M365 or Google in Setup, the tool shows exactly where to look in the admin console, what to check, and what each score level looks like for that platform.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Score the control using the scoring guide</div><div class="step-body">Click the score descriptor that matches what you have seen. Read the descriptor carefully — each one describes what you must be able to evidence. If you cannot evidence it, cap the score at 2.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><div class="step-title">Capture evidence and notes</div><div class="step-body">Complete the evidence capture fields: tool/platform, policy reference, date last reviewed, consultant notes. If something was risk accepted, complete the risk acceptance document reference field.</div></div></div>
+  </div>
+
+  <h2>Handling client pushback on scores</h2>
+  <table>
+    <thead><tr><th>Client says</th><th>Consultant response</th></tr></thead>
+    <tbody>
+      <tr><td>"That seems harsh — we have the tool in place"</td><td>"I completely understand — the tool is definitely a foundation. What we're reflecting here is that without active monitoring and enforcement configuration, the tool isn't providing the protection it could. That's actually good news — the investment is already there."</td></tr>
+      <tr><td>"We've never had an incident, so surely we're doing something right?"</td><td>"That's reassuring. What we can't always tell is whether an incident hasn't happened because of strong controls, or because one hasn't been attempted yet — or attempted and not detected. This score reflects what would happen if one were attempted today."</td></tr>
+      <tr><td>"I think we're better than a 2 on that"</td><td>"Let me make sure I've captured everything correctly — can you show me [specific evidence]? If that's in place and I've missed it, we can absolutely revisit. My job is to reflect what's actually there."</td></tr>
+      <tr><td>"Our last IT company gave us a clean bill of health"</td><td>"That's useful context. What we're doing today is going a level deeper — looking at specific configurations rather than high-level assurances."</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout danger">
+    <div class="callout-icon">🚫</div>
+    <div class="callout-body">
+      <div class="callout-title">Never change a score to make a conversation more comfortable</div>
+      <p class="callout-text">An inflated score harms the client by understating risk, undermines the credibility of the assessment programme, and weakens the LBT commercial case. If a score is uncomfortable to deliver, use the language guide to frame it constructively — but do not change the number.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — SCORING IN THE TOOL
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-scoring" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Scoring in the Tool</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>How the score is calculated</h2>
+  <p>Each control is scored 1–5. Controls within a domain are averaged to produce a domain score. Domain scores are combined using weighted averages (each domain has a set weight — Cyber Security Controls, for example, carries 14% of the overall score) to produce the overall Technology Resilience Score™.</p>
+
+  <div class="callout info">
+    <div class="callout-icon">ℹ️</div>
+    <div class="callout-body">
+      <div class="callout-title">Opt-out controls are excluded from the calculation</div>
+      <p class="callout-text">Controls marked N/A or Deferred are excluded. The domain weight is redistributed across the remaining scored controls. Third-Party controls are included at their scored value but capped at 4.0. Risk Accepted controls are forced to 2.0 regardless of compensating controls.</p>
+    </div>
+  </div>
+
+  <h2>Score scale — quick reference</h2>
+  <table>
+    <thead><tr><th>Score</th><th>Label</th><th>What it means</th><th>Framework threshold</th></tr></thead>
+    <tbody>
+      <tr><td><span class="score-band band-1">1 — Initial</span></td><td>Initial</td><td>Nothing in place or completely ineffective. No evidence possible.</td><td>No framework satisfied</td></tr>
+      <tr><td><span class="score-band band-2">2 — Developing</span></td><td>Developing</td><td>Something exists but not enforced, tested, monitored, or complete. False confidence is common here.</td><td>No framework satisfied</td></tr>
+      <tr><td><span class="score-band band-3">3 — Defined</span></td><td>Defined</td><td>Working, documented, actively used control. Good coverage, tested infrequently.</td><td>Cyber Essentials baseline</td></tr>
+      <tr><td><span class="score-band band-4">4 — Managed</span></td><td>Managed</td><td>Fully deployed, monitored, tested, and reported. What LBT's managed service delivers.</td><td>CE+, ISO 27001 (most controls)</td></tr>
+      <tr><td><span class="score-band band-5">5 — Optimised</span></td><td>Optimised</td><td>Automated, continuously improving, integrated into governance, evidenced for audit.</td><td>CE+, ISO 27001, SOC 2, NIST CSF</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The golden rule</h2>
+  <div class="callout danger">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">If you cannot see it, you cannot score it above 2</div>
+      <p class="callout-text">A score of 3 or above requires you to have observed, tested, or been shown documented evidence during the session. Client reassurance is not evidence. "They told me it's in place" is a score 2.</p>
+    </div>
+  </div>
+
+  <h2>Common scoring traps</h2>
+  <table>
+    <thead><tr><th>Trap</th><th>Example</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Aspiration trap</strong></td><td>"We're planning to implement MFA" — scored as 3</td><td>Score what exists today. Future plans are not controls.</td></tr>
+      <tr><td><strong>Tool ownership trap</strong></td><td>Proofpoint deployed but DMARC on p=none — scored as 3 for email</td><td>Tools without active use and correct configuration are capped at 2.</td></tr>
+      <tr><td><strong>Recency trap</strong></td><td>"We tested our backup a couple of years ago" — scored as 3</td><td>Restore tests must be within 12 months. Always ask for the date.</td></tr>
+      <tr><td><strong>Coverage gap trap</strong></td><td>EDR on 90% of endpoints — scored as 4</td><td>Partial deployment caps the score at 3. Coverage means 100%.</td></tr>
+      <tr><td><strong>Policy document trap</strong></td><td>IR plan exists but was last reviewed 3 years ago — scored as 3</td><td>A document that is not practised or current scores 2.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — OPT-OUTS
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-optouts" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Opt-Outs &amp; Exceptions</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>The four opt-out types</h2>
+  <p>Not every control applies to every client. Use the <strong>+ Opt-Out</strong> button on each control to apply an exception. If the client profile (set in Setup) triggers a suggested opt-out, the button shows a count badge.</p>
+
+  <table>
+    <thead><tr><th>Type</th><th>When to use</th><th>Score impact</th><th>Requires</th></tr></thead>
+    <tbody>
+      <tr><td><strong>⊘ Not Applicable</strong></td><td>Control genuinely cannot apply — structural operating model reason (e.g. 100% WFH, no network to manage)</td><td>Excluded from score. Domain weight redistributed.</td><td>Specific structural reason documented. Re-evaluated at each reassessment.</td></tr>
+      <tr><td><strong>🏢 Third-Party Managed</strong></td><td>Control exists but owned by landlord, co-lo provider, or parent company IT — LBT cannot directly manage it</td><td>Scored normally (1–4, capped at 4). TP flag added. Supply chain risk entry generated.</td><td>Third-party name documented. Any evidence reviewed (e.g. ISO cert) noted.</td></tr>
+      <tr><td><strong>⏱ Deferred</strong></td><td>Control in scope but couldn't be assessed this session — key person absent, system access unavailable</td><td>Excluded. Assessment marked Incomplete. Auto-scores 1 if not resolved within 60 days.</td><td>Mandatory follow-up date (within 30 days). Named responsible person. CW ticket created.</td></tr>
+      <tr><td><strong>⚠ Risk Accepted</strong></td><td>Client has made an informed decision not to implement — legacy system limitation, operational constraint, cost decision</td><td>Forced to score 2 regardless of compensating controls.</td><td>Written risk acceptance from director/MD. Filed in SharePoint. Reference noted in evidence field.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warning">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Before applying an N/A, ask: does the underlying risk still exist?</div>
+      <p class="callout-text">If the answer is yes — even partially — the control is not N/A. It may be Third-Party or Risk Accepted, but not N/A. A client in a serviced office still has a network security risk — it is managed by their landlord (Third-Party), not absent.</p>
+    </div>
+  </div>
+
+  <h2>Common N/A scenarios pre-configured in the tool</h2>
+  <ul>
+    <li><strong>Network security controls</strong> — automatically suggested as N/A for 100% WFH clients; suggested as Third-Party for serviced office clients</li>
+    <li><strong>On-premise server management</strong> — suggested as N/A when "no on-prem servers" is ticked in Setup</li>
+    <li><strong>Physical access controls</strong> — suggested as N/A for 100% WFH; Third-Party for serviced office</li>
+    <li><strong>Mobile MDM</strong> — suggested as N/A when "no company-owned mobile devices" is ticked and no corporate data is accessed on personal devices</li>
+    <li><strong>SBOM/bespoke software</strong> — suggested as N/A when "no bespoke software" is ticked</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — PLATFORM DIFFERENCES
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-platforms" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Platform Differences — M365 vs Google Workspace</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>How platform selection works in the tool</h2>
+  <p>When you select M365 or Google Workspace in the Setup tab, the Assessment tab shows platform-specific guidance inside each control — the correct admin console path, what to check, scoring thresholds specific to that platform, and evidence to capture.</p>
+
+  <h2>Critical Google Workspace traps</h2>
+  <div class="callout danger">
+    <div class="callout-icon">🚨</div>
+    <div class="callout-body">
+      <div class="callout-title">Google Vault is NOT a backup</div>
+      <p class="callout-text">Google Vault is a legal hold and eDiscovery tool. It does not protect against data deleted by a user, admin error, or ransomware affecting cloud sync. If a client believes Vault is their backup, score backup at 1 until Axient 360 or equivalent is confirmed.</p>
+    </div>
+  </div>
+  <div class="callout danger">
+    <div class="callout-icon">🚨</div>
+    <div class="callout-body">
+      <div class="callout-title">Google default audit log retention is 6 months — not 12</div>
+      <p class="callout-text">The 12-month minimum required for a score of 3 on Monitoring/Logging is NOT met by Google's default. Always confirm extended retention is configured via Vault export or SIEM ingestion. Failure to do this caps the logging score at 2.</p>
+    </div>
+  </div>
+  <div class="callout warning">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Google has no native Privileged Identity Management (PIM)</div>
+      <p class="callout-text">Unlike Entra PIM in M365, Google Workspace has no built-in JIT privileged access management. Score 4–5 on PAM for Google clients requires demonstrable compensating controls: minimal super admin count (≤2 dedicated accounts), Titan Keys or FIDO2 enforced, ConnectWise PAM for all privileged tasks, and a documented compensating control programme. Always note this in the report.</p>
+    </div>
+  </div>
+
+  <h2>Platform comparison — key controls</h2>
+  <table>
+    <thead><tr><th>Control</th><th>M365 approach</th><th>Google approach</th></tr></thead>
+    <tbody>
+      <tr><td><strong>MFA</strong></td><td>Entra ID Conditional Access Policies</td><td>Google Admin 2SV enforcement + Context-Aware Access (licence dependent)</td></tr>
+      <tr><td><strong>PAM</strong></td><td>Entra PIM (JIT) + ConnectWise PAM</td><td>ConnectWise PAM + super admin minimisation + Titan Keys (no native PIM)</td></tr>
+      <tr><td><strong>Email Security</strong></td><td>Proofpoint + Defender for Office 365</td><td>Proofpoint + Gmail Advanced Protection</td></tr>
+      <tr><td><strong>EDR</strong></td><td>Microsoft Defender for Endpoint + Huntress</td><td>Bitdefender GravityZone + Huntress</td></tr>
+      <tr><td><strong>DLP</strong></td><td>Microsoft Purview DLP + Sensitivity Labels</td><td>Google Workspace DLP (Drive + Gmail) + Google Vault</td></tr>
+      <tr><td><strong>SIEM / Logging</strong></td><td>Microsoft Sentinel / Defender XDR + Huntress SIEM</td><td>Google Chronicle / Huntress SIEM (default retention gap — see above)</td></tr>
+      <tr><td><strong>Cloud Backup</strong></td><td>Axient 360 for M365</td><td>Axient 360 for Google Workspace (Vault ≠ backup — see above)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — EVIDENCE CAPTURE
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-evidence" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Evidence Capture</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>Why evidence capture matters</h2>
+  <p>Evidence is what separates a verified Technology Resilience Score™ from a self-reported guess. Every score of 3 or above must have at least one documented evidence item. Evidence protects LBT professionally, substantiates the risk register in the proposal, and creates an auditable record that scores can be compared against at the next assessment.</p>
+
+  <h2>What to capture for each control</h2>
+  <p>The evidence capture fields in the tool are:</p>
+  <ul>
+    <li><strong>Tool / Platform in use</strong> — the specific product or system (e.g. "Huntress", "Axient 360", "Entra ID")</li>
+    <li><strong>Policy / Document reference</strong> — filename, SharePoint path, or description of the document reviewed</li>
+    <li><strong>Date last reviewed</strong> — when the policy, test, or review last took place. This is critical — see the Recency Trap.</li>
+    <li><strong>Consultant Notes</strong> — what you actually saw: config screenshots, specific settings observed, exclusions noted, context that explains the score</li>
+    <li><strong>Risk Acceptance Document Location</strong> — (shown when Risk Accepted opt-out is applied) — where the signed acceptance is filed</li>
+    <li><strong>Third-Party Evidence Reviewed</strong> — (shown when Third-Party opt-out is applied) — what evidence of the third party's controls was reviewed (ISO cert, SLA, policy document)</li>
+  </ul>
+
+  <h2>Evidence folder structure</h2>
+  <p>Create the folder before the session starts:</p>
+  <code>Clients / [Client Name] / Assessment / [YYYY-MM-DD] /</code>
+  <p style="margin-top:8px">Within it, save:</p>
+  <ul>
+    <li>Screenshots of admin console configurations (named by control: e.g. <code>iam_mfa_conditional_access.png</code>)</li>
+    <li>Policy documents reviewed (PDFs or Word docs)</li>
+    <li>Exported reports (patch compliance, device enrolment, backup job logs)</li>
+    <li>Signed risk acceptance documents (for any Risk Accepted opt-outs)</li>
+  </ul>
+
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">Name screenshots with the control ID</div>
+      <p class="callout-text">Using the control ID as the filename (e.g. <code>cy_email_dmarc_record.png</code>) makes it easy to find evidence at the next assessment and link it to specific controls in a peer review.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — GENERATING THE REPORT
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-report" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">Generating the Report &amp; Proposal</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>Report tab — what it shows</h2>
+  <p>The Report tab in the assessment tool provides a preview of the client-facing output including: overall score, domain breakdown with benchmark comparison, opt-out appendix (N/A controls, third-party dependencies, risk accepted entries), and scope notes. This is the data that feeds the ConnectWise Sell proposal.</p>
+
+  <h2>Generating the PDF report</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Review the Report tab</div><div class="step-body">Check all scores are finalised, opt-outs have reasons documented, and no controls are left unscored without an opt-out reason.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Click "Generate PDF Report"</div><div class="step-body">In production, this triggers the Rewst workflow to generate a branded Word/PDF report via Microsoft Graph API and save it to SharePoint. The URL is written to <code>LBT_Report_URL</code> in ConnectWise.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Click "Write to ConnectWise"</div><div class="step-body">Triggers the Rewst workflow to write all <code>LBT_Score_*</code> domain scores, <code>LBT_Top_Risks</code>, <code>LBT_Roadmap_Phase</code>, and other tracking fields to the CW company record.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Click "Notify Sales Team"</div><div class="step-body">Sends a Resend email to the sales team with: client name, overall score, top 3 risks, post-onboarding target score, estimated ARR, and a link to the draft proposal in ConnectWise Sell.</div></div></div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">✅</div>
+    <div class="callout-body">
+      <div class="callout-title">ConnectWise Sell proposal is auto-generated</div>
+      <p class="callout-text">When the Rewst workflow runs, it creates or updates a ConnectWise Sell opportunity and populates the proposal template with all assessment data — scores, risk register, phase items, executive summary, and score trajectory. The salesperson receives a notification to review, personalise the cover note, and send.</p>
+    </div>
+  </div>
+
+  <h2>QA checklist before submitting</h2>
+  <ul class="checklist">
+    <li>Every score of 3+ has at least one documented evidence item in the evidence folder</li>
+    <li>No score based solely on verbal client assurance</li>
+    <li>All evidence items have a date recorded</li>
+    <li>Partial coverage gaps reflected in scores (not averaged away)</li>
+    <li>No score above 3 where a test-dependent control (backup restore, IR plan test) has not been conducted in 12 months</li>
+    <li>MFA scores above 3 verified via conditional access policy, not user confirmation</li>
+    <li>Backup score above 2 verified with offsite/separate-tenant destination confirmed</li>
+    <li>All Risk Accepted opt-outs have a signed acceptance document filed and referenced</li>
+    <li>Report reviewed by peer consultant if this is within your first 6 assessments</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     PAID ASSESSMENT — AFTER THE SESSION
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="paid-after" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Paid Assessment</div>
+    <div class="article-title">After the Session</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-paid">Paid Assessment</span></div>
+  </div>
+
+  <h2>Post-session timeline</h2>
+  <table>
+    <thead><tr><th>Deadline</th><th>Action</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Same day</strong></td><td>Finalise all scores. Complete evidence capture in SharePoint. Run "Write to ConnectWise" to update CW company fields.</td><td>Consultant</td></tr>
+      <tr><td><strong>24 hours</strong></td><td>Write consultant notes for any domain where score was marginal or client pushed back. Complete any deferred items if possible.</td><td>Consultant</td></tr>
+      <tr><td><strong>48 hours</strong></td><td>Submit for peer review (if within first 6 assessments). Run "Generate PDF Report" if not done same-day.</td><td>Consultant + Reviewer</td></tr>
+      <tr><td><strong>5 working days</strong></td><td>Report delivered to client. Sales team notified. Follow-up call scheduled. Proposal sent via ConnectWise Sell.</td><td>Consultant + Sales</td></tr>
+      <tr><td><strong>30 days</strong></td><td>Any deferred controls must be assessed by this date. If not, they are scored 1 and a gap narrative is added to the report.</td><td>Consultant</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Setting the next assessment date</h2>
+  <p>For new managed service clients, the first ongoing (QBR) assessment is scheduled at 90 days from the onboarding session start date. This is set in ConnectWise as <code>LBT_Next_Assessment</code> and triggers a Rewst reminder to the assigned consultant.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — OVERVIEW
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-overview" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">Overview &amp; Purpose</div>
+    <div class="article-meta">
+      <span class="meta-item">👤 Owner: Nick Haley</span>
+      <span class="meta-item"><span class="guide-badge badge-qbr">QBR Mode</span></span>
+    </div>
+  </div>
+
+  <h2>What the QBR mode is</h2>
+  <p>QBR mode is the quarterly touchpoint that turns the initial paid assessment into a <strong>long-term client relationship engine</strong>. It is not simply a re-run of the assessment — it is a structured conversation about progress, priorities, and the next quarter's investment.</p>
+  <p>It runs in the same assessment tool as the paid assessment. Switch to QBR mode using the mode bar at the top of the screen.</p>
+
+  <h2>What QBR mode does</h2>
+  <ul>
+    <li>Compares the current quarter's scores against the previous quarter (delta view)</li>
+    <li>Surfaces which domains have improved, stayed flat, or regressed</li>
+    <li>Takes a steer from the client on what they care about most right now (the Priority selector)</li>
+    <li>Generates a <strong>prioritised action plan</strong> using the scoring engine — ranked by greatest overall score gain, weighted by client priorities, with floor domains always first</li>
+    <li>Produces a QBR report slide suitable for the meeting itself</li>
+  </ul>
+
+  <h2>The prioritisation engine — how it works</h2>
+  <p>The engine ranks actions using five factors:</p>
+  <ol>
+    <li><strong>Floor-first rule</strong> — any domain scoring below 2.0 is automatically ranked first, regardless of priorities. You cannot push a 3 to a 4 while a 1 exists anywhere in the environment.</li>
+    <li><strong>Domain balance</strong> — domains below the current overall average are boosted; domains already above average are dampened. This prevents polishing one area while neglecting others.</li>
+    <li><strong>Client priority weighting</strong> — the priorities selected by the client apply multipliers to relevant domains (e.g. selecting "Cyber Insurance" boosts IAM, Cyber, and BCDR).</li>
+    <li><strong>Effort efficiency</strong> — lower-effort actions score higher than equivalent-gain heavy lifts. Quick wins surface naturally.</li>
+    <li><strong>Benchmark gap</strong> — domains below the SMB benchmark of 3.5 receive an additional 1.3× boost.</li>
+  </ol>
+
+  <div class="callout success">
+    <div class="callout-icon">✅</div>
+    <div class="callout-body">
+      <div class="callout-title">The engine shows the overall score impact of each individual action</div>
+      <p class="callout-text">Every action in the plan shows exactly how many points it would add to the client's overall Technology Resilience Score™ if completed. The consultant can show the client a running projection: "If we complete these three actions next quarter, your score moves from 2.8 to 3.3."</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — PREPARING
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-prep" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">Preparing the QBR</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-qbr">QBR Mode</span></div>
+  </div>
+
+  <h2>Pre-QBR checklist</h2>
+  <ul class="checklist">
+    <li>Review the client's previous scores in ConnectWise (LBT_Score_* custom fields)</li>
+    <li>Review any actions agreed at the last QBR — were they completed?</li>
+    <li>Check the client's sector for any relevant recent incidents or regulatory developments</li>
+    <li>Open the assessment tool and switch to QBR mode</li>
+    <li>If scores have been updated since the last assessment, enter them using "Update scores for this quarter" in the Score Overview tab</li>
+    <li>Enter previous quarter scores when prompted (pulled from CW in production via Rewst)</li>
+    <li>Consider client priorities before the meeting — what is the client most focused on commercially right now?</li>
+  </ul>
+
+  <h2>Loading data into QBR mode</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Switch to QBR mode</div><div class="step-body">Click <strong>📊 QBR</strong> in the mode bar. The tool switches to the four QBR tabs: Score Overview, Client Priorities, Action Plan, QBR Report.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Enter current quarter scores</div><div class="step-body">In the Score Overview tab, click <strong>Update scores for this quarter</strong>. Enter the current verified score for each domain. In production, these are pre-populated from the most recent ongoing assessment.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Verify previous scores</div><div class="step-body">Previous scores are fetched from ConnectWise <code>LBT_Previous_Score</code> and individual domain fields via Rewst. The delta bars update automatically.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Review the QBR narrative (Score Overview tab)</div><div class="step-body">The tool auto-generates a narrative paragraph suitable for opening the QBR conversation. Review and adapt it to your knowledge of the client before the meeting.</div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — CLIENT PRIORITIES
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-priorities" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">Setting Client Priorities</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-qbr">QBR Mode</span></div>
+  </div>
+
+  <h2>What the priority selector does</h2>
+  <p>Client priorities adjust the weighting of the action plan engine. Selecting a priority applies domain multipliers — domains directly relevant to that priority are ranked higher in the action plan. This allows the action plan to reflect what the client cares about commercially right now, not just the abstract technical priority order.</p>
+
+  <div class="callout info">
+    <div class="callout-icon">ℹ️</div>
+    <div class="callout-body">
+      <div class="callout-title">Floor-first always overrides priorities</div>
+      <p class="callout-text">No matter which priorities are selected, any domain scoring below 2.0 is ranked first in the action plan. A client who says "I only care about compliance" cannot deprioritise a critical floor domain — the engine will not allow it.</p>
+    </div>
+  </div>
+
+  <h2>The six priority categories</h2>
+  <table>
+    <thead><tr><th>Priority</th><th>Use when…</th><th>Domains boosted</th></tr></thead>
+    <tbody>
+      <tr><td><strong>📜 Regulatory / Compliance</strong></td><td>Client faces ICO scrutiny, FCA requirements, upcoming audit, or sector-specific framework pressure</td><td>Data Protection (×2.0), Governance (×1.5), Supply Chain (×1.3), Monitoring (×1.2)</td></tr>
+      <tr><td><strong>🛡 Cyber Insurance</strong></td><td>Client is renewing cyber insurance, has been declined, or wants better premium terms</td><td>IAM (×2.0), Cyber (×1.8), BCDR (×1.8), Endpoints (×1.4), Monitoring (×1.3)</td></tr>
+      <tr><td><strong>📈 Business Growth &amp; Clients</strong></td><td>Client is bidding for enterprise contracts, facing security questionnaires, or pursuing Cyber Essentials Plus</td><td>Cyber (×1.8), IAM (×1.5), Governance (×1.5), Data (×1.4), Culture (×1.2)</td></tr>
+      <tr><td><strong>⚙️ Operational Resilience</strong></td><td>Client has had incidents, downtime, or is worried about continuity</td><td>BCDR (×2.0), Monitoring (×1.8), Infrastructure (×1.5), Endpoints (×1.3)</td></tr>
+      <tr><td><strong>⚠️ Risk Reduction</strong></td><td>Board or insurers have flagged risk concerns; client wants demonstrable risk improvement</td><td>IAM (×2.0), Cyber (×1.8), Endpoints (×1.5), Supply Chain (×1.3), Culture (×1.3)</td></tr>
+      <tr><td><strong>💰 Cost &amp; Efficiency</strong></td><td>Client is focused on ROI, avoiding incident costs, or justifying IT spend to the board</td><td>BCDR (×1.5), Monitoring (×1.4), Infrastructure (×1.3), Governance (×1.2)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How to set priorities in the session</h2>
+  <p>The best time to set priorities is <strong>at the start of the QBR meeting</strong>, after you have shared the score overview. Ask the client directly:</p>
+  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-left:4px solid #0ea5e9;border-radius:8px;padding:14px 16px;margin:12px 0;">
+    <p style="color:#0c4a6e;font-style:italic;margin:0;">"Before we look at the action plan, I want to make sure it reflects what matters most to you right now. Looking at these six areas — compliance, insurance, growth, resilience, risk reduction, cost — which two or three feel most relevant to where the business is at the moment?"</p>
+  </div>
+  <p>Select up to three priorities in the Client Priorities tab, then click <strong>Apply &amp; Generate Action Plan</strong> to regenerate the ranked list.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — ACTION PLAN ENGINE
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-actions" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">The Action Plan Engine</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-qbr">QBR Mode</span></div>
+  </div>
+
+  <h2>Reading the action plan</h2>
+  <p>Each action card in the Action Plan tab shows:</p>
+  <ul>
+    <li><strong>Rank number</strong> — priority order. 🚨 Critical Floor badge means this domain is below 2.0 and is ranked first regardless of priorities.</li>
+    <li><strong>Action label</strong> — what needs to be done to move the domain to the next score level</li>
+    <li><strong>Domain and score move</strong> — which domain this addresses and the specific score move (e.g. IAM: 1.9 → 2.0)</li>
+    <li><strong>Domain gain</strong> — how many points this adds to that domain's score</li>
+    <li><strong>Overall lift</strong> — how many points this action adds to the overall Technology Resilience Score™</li>
+    <li><strong>After this action</strong> — what the overall score becomes if only this action is completed</li>
+    <li><strong>Effort rating</strong> — ★ to ★★★★ (lower = quicker win)</li>
+    <li><strong>LBT Delivered badge</strong> — whether LBT delivers this or whether it is a client-owned action</li>
+    <li><strong>Running progress bar</strong> — shows visually where the overall score sits after completing each successive action</li>
+  </ul>
+
+  <h2>Using the projection summary</h2>
+  <p>At the bottom of the Action Plan tab, a projection panel shows the overall score after completing the top 3, top 6, and all actions. Use this in the meeting to frame the next quarter's ambition:</p>
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #22c55e;border-radius:8px;padding:14px 16px;margin:12px 0;">
+    <p style="color:#14532d;font-style:italic;margin:0;">"If we focus on just the top three actions this quarter, your score moves from 2.8 to 3.3. That takes you above the risk stabilisation threshold and is the most impactful use of our time together over the next 90 days."</p>
+  </div>
+
+  <h2>Marking actions complete</h2>
+  <p>As work is completed between QBRs, the consultant can mark actions done using the <strong>Mark done</strong> button on each card. Completed actions are shown with a green ✓ and greyed out. They remain visible so the client can see progress. The projection updates in real time.</p>
+
+  <h2>Why the floor rule matters — a practical example</h2>
+  <div class="callout warning">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Scenario: client wants to focus on compliance (ISO 27001 target)</div>
+      <p class="callout-text">A client scores 3.2 on Governance and 1.6 on BCDR (backup/recovery). They say they want to focus on compliance and governance this quarter. The compliance priority multiplier boosts Governance — but BCDR is at 1.6, below the 2.0 floor threshold. The engine ranks the BCDR action first regardless. The consultant explains: "Your backup position presents an immediate and existential risk — a ransomware attack today would be catastrophic. We need to address this before we can build the governance layer on top of it." This is not a negotiable ranking.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — RUNNING THE MEETING
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-meeting" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">Running the QBR Meeting</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-qbr">QBR Mode</span></div>
+  </div>
+
+  <h2>Recommended QBR agenda — 60 minutes</h2>
+  <table>
+    <thead><tr><th>Time</th><th>Section</th><th>Tool tab</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>0:00–0:05</td><td>Opening</td><td>—</td><td>Set the agenda. "Today we're going to look at progress this quarter, agree on priorities, and land on a clear action plan for the next 90 days."</td></tr>
+      <tr><td>0:05–0:20</td><td>Score review &amp; progress</td><td>Score Overview</td><td>Show the QoQ progress bars. Use the auto-generated narrative. Celebrate improvements. Frame any regressions constructively.</td></tr>
+      <tr><td>0:20–0:30</td><td>Client priorities</td><td>Client Priorities</td><td>Ask the priority question. Select priorities live in the meeting. Show the domain multiplier preview to explain how it affects the plan.</td></tr>
+      <tr><td>0:30–0:45</td><td>Action plan review</td><td>Action Plan</td><td>Walk through the top 5–6 actions. Explain the score impact of each. Confirm which are LBT-delivered and which are client-owned. Agree the top 3 for the next quarter.</td></tr>
+      <tr><td>0:45–0:55</td><td>Trajectory &amp; narrative</td><td>QBR Report</td><td>Show the score trajectory (last quarter → this quarter → top 3 actions → full programme). Reinforce the long-term partnership narrative.</td></tr>
+      <tr><td>0:55–1:00</td><td>Wrap up &amp; next steps</td><td>—</td><td>Confirm agreed actions, owners, and dates. Confirm next QBR date. "I'll send you the QBR report and updated risk register within 48 hours."</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Language to use in the meeting</h2>
+  <table>
+    <thead><tr><th>Situation</th><th>Use this language</th></tr></thead>
+    <tbody>
+      <tr><td>Opening the score review</td><td>"Your Technology Resilience Score has moved from [X] to [Y] this quarter — demonstrating measurable progress in strengthening your operational resilience."</td></tr>
+      <tr><td>Framing a low score</td><td>"Your Technology Resilience Score is being impacted by weaknesses in [area], increasing the likelihood of [specific business risk]."</td></tr>
+      <tr><td>Presenting the action plan</td><td>"If we focus on just these three actions over the next 90 days, your score moves from [X] to [Y] — that's the most impactful use of your investment this quarter."</td></tr>
+      <tr><td>The long-term view</td><td>"By continuing this trajectory, we can position your business to operate at a level of resilience that supports sustained growth and minimises operational risk."</td></tr>
+      <tr><td>Connecting to business outcomes</td><td>"A score of 4.0 opens commercial doors — it satisfies most enterprise client security questionnaires, supports Cyber Essentials Plus, and strengthens your insurance position."</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — REPORT OUTPUT
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-report" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">QBR Report Output</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-qbr">QBR Mode</span></div>
+  </div>
+
+  <h2>What the QBR report contains</h2>
+  <p>The QBR Report tab produces a client-facing document containing:</p>
+  <ul>
+    <li><strong>Score header</strong> — last quarter vs this quarter, score change, and projected target</li>
+    <li><strong>Domain progress grid</strong> — all 10 domains with score bars and delta arrows (▲ improved / ▼ regressed / → unchanged)</li>
+    <li><strong>Quarter summary</strong> — which domains improved, maintained, or need attention; auto-generated narrative paragraph</li>
+    <li><strong>Priority actions table</strong> — the top 5 actions from the prioritised plan, with domain, score move, overall lift, effort, and whether LBT or client delivers</li>
+    <li><strong>Score trajectory</strong> — four milestones: last quarter → this quarter → top 3 actions complete → full programme</li>
+  </ul>
+
+  <h2>Sharing the QBR report</h2>
+  <p>The report is designed to be screenshot or printed directly from the QBR Report tab. In production, clicking <strong>Generate QBR Report</strong> will trigger the Rewst workflow to produce a branded PDF and email it to the client contact within 48 hours of the meeting.</p>
+
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">Show the report in the meeting, not just after it</div>
+      <p class="callout-text">Switching to the QBR Report tab in the last 10 minutes of the meeting and showing the client the trajectory section is one of the most effective moments in the QBR. "Here's where you were, here's where you are, and here's where we can take you." It makes the conversation tangible and the value of the ongoing relationship visible.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     QBR — AFTER THE QBR
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="qbr-after" class="article">
+  <div class="article-header">
+    <div class="article-kicker">QBR Mode</div>
+    <div class="article-title">After the QBR</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-qbr">QBR Mode</span></div>
+  </div>
+
+  <h2>Post-QBR actions</h2>
+  <table>
+    <thead><tr><th>Deadline</th><th>Action</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Same day</strong></td><td>Write updated scores to ConnectWise via Rewst. <code>LBT_Previous_Score</code> is archived, new scores written, <code>LBT_Score_Delta</code> calculated.</td><td>Consultant</td></tr>
+      <tr><td><strong>48 hours</strong></td><td>QBR report PDF sent to client. Agreed actions created as tasks in ConnectWise service board.</td><td>Consultant</td></tr>
+      <tr><td><strong>1 week</strong></td><td>LBT-delivered actions from the top 3 are scheduled with the client. Client-owned actions are confirmed with the client contact.</td><td>Consultant + Account Manager</td></tr>
+      <tr><td><strong>Next QBR date</strong></td><td>Confirm and enter in <code>LBT_Next_Assessment</code> in ConnectWise. Should be approximately 90 days from this session.</td><td>Consultant</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Upsell opportunities surfaced by QBR mode</h2>
+  <p>The action plan naturally surfaces upsell conversations. LBT-delivered actions that appear in the top 3 are direct service upsell opportunities. Look for:</p>
+  <ul>
+    <li><strong>Actions marked "LBT Delivered"</strong> that the client doesn't yet have — these are new service line conversations</li>
+    <li><strong>Domains that have stalled at 2.x for two consecutive quarters</strong> — there is likely a barrier (cost, awareness, or technical dependency) to address</li>
+    <li><strong>Trajectory conversations</strong> — "To reach 4.0, which is where you need to be for CE+ / your insurance / enterprise clients, we need to add [service]. Here's what that looks like."</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     REFERENCE — SCORE SCALE
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="ref-scores" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Reference</div>
+    <div class="article-title">Score Scale Quick Reference</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-both">Both</span></div>
+  </div>
+
+  <table>
+    <thead><tr><th>Score</th><th>Label</th><th>Risk</th><th>Observable state</th><th>Frameworks satisfied</th><th>LBT position</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="score-band band-1">1.0–1.9</span></td>
+        <td>Initial</td>
+        <td>Critical / High</td>
+        <td>Nothing in place or completely ineffective. No evidence of control exists.</td>
+        <td>None</td>
+        <td>Immediate risk. Phase 1 priority. Floor-first rule applies.</td>
+      </tr>
+      <tr>
+        <td><span class="score-band band-2">2.0–2.4</span></td>
+        <td>Developing</td>
+        <td>Elevated</td>
+        <td>Something exists (tool, document, informal practice) but not enforced, tested, monitored, or complete. False confidence is common.</td>
+        <td>None</td>
+        <td>Most common state for new clients. Phase 1 scope.</td>
+      </tr>
+      <tr>
+        <td><span class="score-band band-3">2.5–2.9</span></td>
+        <td>Developing+</td>
+        <td>Elevated</td>
+        <td>Controls exist and partially work. Coverage gaps or untested elements remain.</td>
+        <td>None formally</td>
+        <td>Phase 1 completion target for most clients.</td>
+      </tr>
+      <tr>
+        <td><span class="score-band band-3">3.0–3.4</span></td>
+        <td>Defined</td>
+        <td>Moderate</td>
+        <td>Working, documented, actively-used control. Coverage good but not complete. Tested infrequently.</td>
+        <td>Cyber Essentials baseline</td>
+        <td>Risk stabilisation threshold. Phase 2 entry point.</td>
+      </tr>
+      <tr>
+        <td><span class="score-band band-4">3.5–3.9</span></td>
+        <td>Defined+</td>
+        <td>Moderate / Low</td>
+        <td>Control is solid and regularly tested. Minor gaps or automation opportunities remain.</td>
+        <td>CE, most ISO 27001 controls</td>
+        <td>Phase 2 completion target.</td>
+      </tr>
+      <tr>
+        <td><span class="score-band band-4">4.0–4.4</span></td>
+        <td>Managed</td>
+        <td>Low</td>
+        <td>Fully deployed, monitored, tested, and reported. What LBT's managed service delivers and maintains.</td>
+        <td>CE+, ISO 27001, most SOC 2 controls</td>
+        <td>Target state. Satisfies most insurer and enterprise client requirements.</td>
+      </tr>
+      <tr>
+        <td><span class="score-band band-5">4.5–5.0</span></td>
+        <td>Optimised</td>
+        <td>Low</td>
+        <td>Automated, continuously improving, integrated into governance, fully evidenced for audit.</td>
+        <td>CE+, ISO 27001, SOC 2, NIST CSF</td>
+        <td>Phase 3+ aspiration. Full framework compliance.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     REFERENCE — LANGUAGE GUIDE
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="ref-language" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Reference</div>
+    <div class="article-title">Report Language Guide</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-both">Both</span></div>
+  </div>
+
+  <h2>The three rules</h2>
+  <ol>
+    <li>Always pair a score with the business risk it represents — never state a score in isolation</li>
+    <li>Always reference trajectory — where they are going, not just where they are now</li>
+    <li>Always link to business outcomes: growth, client confidence, regulatory standing, insurability — not just security</li>
+  </ol>
+
+  <h2>Before and after examples</h2>
+  <table>
+    <thead><tr><th>Context</th><th>❌ Do not use</th><th>✅ Use this</th></tr></thead>
+    <tbody>
+      <tr><td>Describing a low score</td><td>"IAM maturity is low."</td><td>"Your Technology Resilience Score is being impacted by weaknesses in access control, increasing the likelihood of unauthorised access and credential-based attacks."</td></tr>
+      <tr><td>Low score framing</td><td>"You scored 1 on backup, which is very bad."</td><td>"Your current backup position represents one of the highest areas of operational risk. Without a tested, immutable backup strategy, a ransomware incident could result in permanent data loss."</td></tr>
+      <tr><td>Benchmark comparison</td><td>"Most of our clients are better than you at this."</td><td>"Most organisations of your size and sector operate at 3.5+. Your current position of 2.1 presents elevated operational risk relative to your peers."</td></tr>
+      <tr><td>QBR progress</td><td>"Your MFA is better now."</td><td>"Your Technology Resilience Score has improved from 2.3 to 3.1 — demonstrating measurable progress in strengthening your operational resilience and significantly reducing your exposure to credential-based attacks."</td></tr>
+      <tr><td>Investment narrative</td><td>"This will cost £X per month."</td><td>"Addressing these gaps positions your business to operate with significantly reduced exposure to the risks that cause the most common and costly incidents for organisations of your size."</td></tr>
+      <tr><td>Target state</td><td>"You need to get to a 4."</td><td>"By completing this programme, we can position your organisation to achieve a Technology Resilience Score of 4.0 — the threshold that satisfies the expectations of most insurers, clients, and regulatory frameworks."</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     REFERENCE — CONNECTWISE FIELDS
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="ref-cw" class="article">
+  <div class="article-header">
+    <div class="article-kicker">Reference</div>
+    <div class="article-title">ConnectWise Custom Field Reference</div>
+    <div class="article-meta"><span class="meta-item">👤 Owner: Nick Haley</span><span class="guide-badge badge-both">Both</span></div>
+  </div>
+
+  <h2>Domain score fields</h2>
+  <table>
+    <thead><tr><th>Field Name</th><th>Type</th><th>Written by</th></tr></thead>
+    <tbody>
+      <tr><td><code>LBT_Score_Overall</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_Governance</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_Infrastructure</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_Endpoints</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_IAM</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_Cyber</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_DataCompliance</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_Monitoring</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_SupplyChain</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_BCDR</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+      <tr><td><code>LBT_Score_Culture</code></td><td>Decimal (2dp)</td><td>Paid &amp; Ongoing assessments</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Tracking fields</h2>
+  <table>
+    <thead><tr><th>Field Name</th><th>Type</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>LBT_Assessment_Date</code></td><td>Date</td><td>Date of most recent assessment</td></tr>
+      <tr><td><code>LBT_Assessment_Tier</code></td><td>Text (50)</td><td>lite / paid / ongoing</td></tr>
+      <tr><td><code>LBT_Critical_Gaps</code></td><td>Number</td><td>Count of controls scored 1</td></tr>
+      <tr><td><code>LBT_Priority_Gaps</code></td><td>Number</td><td>Count of controls scored 2</td></tr>
+      <tr><td><code>LBT_Top_Risks</code></td><td>Text (250)</td><td>Top 3 gap labels, comma separated</td></tr>
+      <tr><td><code>LBT_Target_Score</code></td><td>Decimal</td><td>Agreed target — default 4.0</td></tr>
+      <tr><td><code>LBT_Previous_Score</code></td><td>Decimal</td><td>Overall score from previous assessment</td></tr>
+      <tr><td><code>LBT_Score_Delta</code></td><td>Decimal</td><td>Change vs previous (+ve = improvement)</td></tr>
+      <tr><td><code>LBT_Next_Assessment</code></td><td>Date</td><td>Scheduled next QBR / reassessment date</td></tr>
+      <tr><td><code>LBT_Assessment_Count</code></td><td>Number</td><td>Total assessments completed for this company</td></tr>
+      <tr><td><code>LBT_Platform</code></td><td>Text (50)</td><td>M365 / Google / Mixed — set from assessment tool</td></tr>
+      <tr><td><code>LBT_Roadmap_Phase</code></td><td>Text (50)</td><td>Current phase: Phase 1 / Phase 2 / Phase 3</td></tr>
+      <tr><td><code>LBT_Report_URL</code></td><td>Text (500)</td><td>URL to latest PDF report in SharePoint</td></tr>
+      <tr><td><code>LBT_Opp_Value</code></td><td>Decimal</td><td>Estimated remaining ARR opportunity (£)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warning">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Lite assessment scores must never overwrite CW company fields</div>
+      <p class="callout-text">Lite scores are self-reported and unvalidated. The Rewst workflow must check <code>assessment_tier != "lite"</code> before running the Update Company action. Only paid and ongoing assessments should write to CW company fields.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function show(id) {
+  document.querySelectorAll('.article').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  // Find and activate the sidebar link that triggered this
+  document.querySelectorAll('.sidebar-link').forEach(l => {
+    if (l.getAttribute('onclick') && l.getAttribute('onclick').includes(id)) {
+      l.classList.add('active');
+    }
+  });
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
