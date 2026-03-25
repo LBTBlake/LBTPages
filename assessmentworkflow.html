@@ -1,0 +1,846 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LBT — Technology Resilience Commercial Workflow</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:#f8fafc;color:#0f172a;font-size:14px;line-height:1.6;}
+
+  /* ── SIDEBAR + MAIN ── */
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:#1e293b;overflow-y:auto;z-index:10;}
+  .main{margin-left:260px;}
+
+  /* ── SIDEBAR ── */
+  .sb-header{padding:20px 18px 14px;border-bottom:1px solid #334155;}
+  .sb-logo{font-weight:900;font-size:16px;color:#fff;letter-spacing:-0.5px;}
+  .sb-logo span{color:#F26101;}
+  .sb-sub{font-size:10px;color:#475569;margin-top:3px;letter-spacing:0.5px;text-transform:uppercase;}
+  .sb-section{padding:14px 18px 4px;font-size:10px;font-weight:700;color:#475569;letter-spacing:1px;text-transform:uppercase;}
+  .sb-link{display:block;padding:8px 18px;font-size:13px;color:#94a3b8;text-decoration:none;cursor:pointer;border-left:3px solid transparent;transition:all .15s;}
+  .sb-link:hover{color:#f1f5f9;background:rgba(255,255,255,0.04);}
+  .sb-link.active{color:#F26101;border-left-color:#F26101;background:rgba(242,97,1,0.08);font-weight:600;}
+  .sb-link.sub{padding-left:30px;font-size:12px;}
+
+  /* ── ARTICLES ── */
+  .article{display:none;max-width:860px;padding:40px 48px 80px;}
+  .article.active{display:block;}
+
+  /* ── ARTICLE HEADER ── */
+  .art-kicker{font-size:11px;font-weight:700;color:#F26101;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+  .art-title{font-size:26px;font-weight:800;color:#090D38;line-height:1.2;margin-bottom:8px;}
+  .art-meta{font-size:12px;color:#94a3b8;display:flex;gap:16px;flex-wrap:wrap;padding-bottom:20px;border-bottom:2px solid #f1f5f9;margin-bottom:28px;}
+
+  /* ── TYPOGRAPHY ── */
+  h2{font-size:17px;font-weight:700;color:#090D38;margin:28px 0 10px;padding-top:8px;border-top:1px solid #f1f5f9;}
+  h2:first-of-type{border-top:none;margin-top:0;}
+  h3{font-size:14px;font-weight:700;color:#334155;margin:18px 0 8px;}
+  p{color:#475569;margin-bottom:12px;line-height:1.75;}
+  strong{color:#0f172a;font-weight:600;}
+  ul,ol{padding-left:20px;margin-bottom:12px;color:#475569;}
+  li{margin-bottom:5px;line-height:1.65;}
+  code{background:#f1f5f9;color:#0f172a;padding:1px 6px;border-radius:4px;font-size:12px;font-family:monospace;border:1px solid #e2e8f0;}
+
+  /* ── CALLOUTS ── */
+  .callout{border-radius:8px;padding:14px 16px;margin:16px 0;display:flex;gap:12px;}
+  .callout-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+  .callout-body{flex:1;}
+  .callout-title{font-weight:700;font-size:13px;margin-bottom:4px;}
+  .callout-text{font-size:13px;line-height:1.65;margin:0;}
+  .info{background:#eff6ff;border:1px solid #bfdbfe;}
+  .info .callout-title{color:#1d4ed8;}
+  .info .callout-text{color:#1e40af;}
+  .warn{background:#fffbeb;border:1px solid #fde68a;}
+  .warn .callout-title{color:#d97706;}
+  .warn .callout-text{color:#92400e;}
+  .success{background:#f0fdf4;border:1px solid #bbf7d0;}
+  .success .callout-title{color:#16a34a;}
+  .success .callout-text{color:#14532d;}
+  .danger{background:#fef2f2;border:1px solid #fecaca;}
+  .danger .callout-title{color:#dc2626;}
+  .danger .callout-text{color:#991b1b;}
+  .orange{background:#fff7ed;border:1px solid #fed7aa;}
+  .orange .callout-title{color:#c2410c;}
+  .orange .callout-text{color:#9a3412;}
+
+  /* ── STEPS ── */
+  .steps{margin:16px 0;}
+  .step{display:flex;gap:14px;margin-bottom:12px;}
+  .step-num{width:30px;height:30px;border-radius:8px;background:#090D38;color:#F26101;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .step-content{flex:1;}
+  .step-title{font-weight:700;color:#0f172a;font-size:14px;margin-bottom:3px;}
+  .step-body{color:#475569;font-size:13px;line-height:1.65;}
+  .step-body ul{margin:6px 0;}
+
+  /* ── TABLES ── */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;}
+  thead tr{background:#090D38;}
+  thead th{padding:9px 12px;text-align:left;color:rgba(255,255,255,0.6);font-weight:700;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;}
+  tbody tr:nth-child(odd){background:#f8fafc;}
+  tbody tr:nth-child(even){background:#fff;}
+  td{padding:9px 12px;border-bottom:1px solid #e2e8f0;vertical-align:top;color:#475569;line-height:1.5;}
+  td:first-child{font-weight:600;color:#0f172a;}
+
+  /* ── PRICING CARDS ── */
+  .price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;}
+  .price-card{background:#090D38;border-radius:10px;padding:18px;text-align:center;}
+  .price-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+  .price-val{font-size:26px;font-weight:900;color:#F26101;line-height:1;}
+  .price-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;}
+
+  /* ── PRODUCT TABLE ── */
+  .product-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;}
+  .product-table th{background:#090D38;padding:9px 12px;text-align:left;color:rgba(255,255,255,0.6);font-weight:700;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;}
+  .product-table td{padding:10px 12px;border-bottom:1px solid #e2e8f0;vertical-align:top;}
+  .product-table tr:nth-child(odd) td{background:#f8fafc;}
+  .product-table tr:nth-child(even) td{background:#fff;}
+
+  /* ── TRIGGER BADGES ── */
+  .trigger{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid;margin:2px;}
+  .t-auto{background:#f0fdf4;color:#16a34a;border-color:#bbf7d0;}
+  .t-manual{background:#fffbeb;color:#d97706;border-color:#fde68a;}
+  .t-system{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+  .t-client{background:#faf5ff;color:#7c3aed;border-color:#e9d5ff;}
+
+  /* ── STATUS BADGES ── */
+  .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px;}
+  .b-live{background:#dcfce7;color:#16a34a;}
+  .b-deploy{background:#fff7ed;color:#d97706;}
+  .b-next{background:#eff6ff;color:#1d4ed8;}
+  .b-planned{background:#f5f3ff;color:#6d28d9;}
+
+  /* ── OWNER CHIPS ── */
+  .owner{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;color:#334155;margin:2px;}
+
+  /* ── TOC ── */
+  .toc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:0 0 24px;}
+  .toc-title{font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;}
+  .toc ul{padding-left:0;list-style:none;margin:0;columns:2;column-gap:20px;}
+  .toc li{margin-bottom:4px;font-size:13px;}
+  .toc a{color:#475569;text-decoration:none;}
+  .toc a:hover{color:#F26101;}
+
+  /* ── FLOW DIAGRAM ── */
+  .flow{display:flex;align-items:flex-start;gap:4px;margin:20px 0;overflow-x:auto;padding-bottom:8px;}
+  .flow-step{display:flex;flex-direction:column;align-items:center;min-width:120px;}
+  .flow-box{background:#090D38;color:#fff;border-radius:8px;padding:12px 10px;text-align:center;width:110px;}
+  .flow-num{width:22px;height:22px;background:#F26101;border-radius:6px;color:#fff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;}
+  .flow-icon{font-size:18px;margin-bottom:4px;}
+  .flow-name{font-size:11px;font-weight:700;line-height:1.3;}
+  .flow-tag{font-size:9px;color:rgba(255,255,255,0.4);margin-top:4px;}
+  .flow-arrow{color:#cbd5e1;font-size:18px;margin-top:20px;flex-shrink:0;}
+
+  /* ── GAP BOX ── */
+  .gap-box{background:#fff7ed;border:1px solid #fed7aa;border-left:3px solid #F26101;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12px;color:#9a3412;}
+  .gap-box strong{color:#c2410c;}
+  .built-box{background:#f0fdf4;border:1px solid #bbf7d0;border-left:3px solid #22c55e;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12px;color:#14532d;}
+  .built-box strong{color:#16a34a;}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────────────────────────────────── -->
+<div class="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">little<span>big</span>tech</div>
+    <div class="sb-sub">Internal Knowledge Base</div>
+  </div>
+
+  <div class="sb-section">Overview</div>
+  <a class="sb-link active" onclick="show('overview')">Workflow Overview</a>
+  <a class="sb-link sub" onclick="show('products')">Products &amp; Pricing</a>
+  <a class="sb-link sub" onclick="show('status')">Build Status</a>
+
+  <div class="sb-section">Phase 1 — Lead Generation</div>
+  <a class="sb-link sub" onclick="show('step1')">Step 1 · Lite Assessment</a>
+  <a class="sb-link sub" onclick="show('step2')">Step 2 · Automation Fires</a>
+  <a class="sb-link sub" onclick="show('step3')">Step 3 · Sales Response</a>
+
+  <div class="sb-section">Phase 2 — Assessment Sale</div>
+  <a class="sb-link sub" onclick="show('step4')">Step 4 · Discovery Call</a>
+  <a class="sb-link sub" onclick="show('step5')">Step 5 · Assessment Proposal</a>
+  <a class="sb-link sub" onclick="show('step6')">Step 6 · Proposal Signed</a>
+
+  <div class="sb-section">Phase 3 — Assessment Delivery</div>
+  <a class="sb-link sub" onclick="show('step7')">Step 7 · Session Scheduled</a>
+  <a class="sb-link sub" onclick="show('step8')">Step 8 · Assessment Conducted</a>
+  <a class="sb-link sub" onclick="show('step9')">Step 9 · Report &amp; Systems</a>
+
+  <div class="sb-section">Phase 4 — Managed Service</div>
+  <a class="sb-link sub" onclick="show('step10')">Step 10 · Opportunity Created</a>
+  <a class="sb-link sub" onclick="show('step11')">Step 11 · Proposal Generated</a>
+  <a class="sb-link sub" onclick="show('step12')">Step 12 · Proposal Delivered</a>
+  <a class="sb-link sub" onclick="show('step13')">Step 13 · Follow-Up Call</a>
+
+  <div class="sb-section">Phase 5 — Close &amp; Onboarding</div>
+  <a class="sb-link sub" onclick="show('step14')">Step 14 · Proposal Signed</a>
+  <a class="sb-link sub" onclick="show('step15')">Step 15 · Onboarding Delivery</a>
+  <a class="sb-link sub" onclick="show('step16')">Step 16 · Quarterly QBR</a>
+
+  <div class="sb-section">Reference</div>
+  <a class="sb-link" onclick="show('gaps')">Outstanding Gaps</a>
+  <a class="sb-link" onclick="show('owners')">Owners &amp; SLAs</a>
+</div>
+
+<!-- ── MAIN ──────────────────────────────────────────────────────────────────── -->
+<div class="main">
+
+<!-- ══ OVERVIEW ══════════════════════════════════════════════════════════════ -->
+<div id="overview" class="article active">
+  <div class="art-kicker">Technology Resilience Initiative</div>
+  <div class="art-title">Commercial Workflow — End to End</div>
+  <div class="art-meta">
+    <span>📅 Created: March 2026</span>
+    <span>👤 Owner: Nick Haley</span>
+    <span>🔁 Review: September 2026</span>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ul>
+      <li><a href="#" onclick="show('products')">Products &amp; Pricing</a></li>
+      <li><a href="#" onclick="show('status')">Build Status</a></li>
+      <li><a href="#" onclick="show('step1')">Phase 1 — Lead Generation</a></li>
+      <li><a href="#" onclick="show('step4')">Phase 2 — Assessment Sale</a></li>
+      <li><a href="#" onclick="show('step7')">Phase 3 — Assessment Delivery</a></li>
+      <li><a href="#" onclick="show('step10')">Phase 4 — Managed Service Proposal</a></li>
+      <li><a href="#" onclick="show('step14')">Phase 5 — Close &amp; Onboarding</a></li>
+      <li><a href="#" onclick="show('gaps')">Outstanding Gaps</a></li>
+    </ul>
+  </div>
+
+  <h2>What this is</h2>
+  <p>This document is the single source of truth for the LBT Technology Resilience commercial workflow — from the moment a prospect lands on the lite assessment on our website, through to a signed managed service agreement and an ongoing quarterly review cycle.</p>
+  <p>Every step is documented with: who owns it, what triggers it, what systems are involved, and what gaps still need to be built. Use this alongside the Consultant Scoring Playbook and the Assessment Tool guide.</p>
+
+  <h2>The full journey at a glance</h2>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">1</div><div class="flow-icon">🌐</div><div class="flow-name">Lite Assessment</div><div class="flow-tag">Lead gen</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">2</div><div class="flow-icon">⚡</div><div class="flow-name">Automation Fires</div><div class="flow-tag">CRM + Teams</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">3</div><div class="flow-icon">📞</div><div class="flow-name">Sales Response</div><div class="flow-tag">Within 2hrs</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">4</div><div class="flow-icon">💬</div><div class="flow-name">Discovery Call</div><div class="flow-tag">Sell assessment</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">5</div><div class="flow-icon">📄</div><div class="flow-name">Assessment Proposal</div><div class="flow-tag">£495 · CW Sell</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">6</div><div class="flow-icon">✍️</div><div class="flow-name">Signed</div><div class="flow-tag">PSA project created</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">7–9</div><div class="flow-icon">🔍</div><div class="flow-name">Assessment Delivered</div><div class="flow-tag">Report + CW updated</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">10–13</div><div class="flow-icon">📊</div><div class="flow-name">MS Proposal</div><div class="flow-tag">Auto-generated</div></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-box"><div class="flow-num">14–16</div><div class="flow-icon">🚀</div><div class="flow-name">Onboarding + QBR</div><div class="flow-tag">Ongoing growth</div></div>
+    </div>
+  </div>
+
+  <h2>Key principles</h2>
+  <ul>
+    <li>The <strong>paid assessment (£495) is a standalone product</strong> — it is never credited against the managed service or onboarding. It stands alone commercially.</li>
+    <li>The <strong>lite assessment score is self-reported</strong> — it is never written to ConnectWise company fields. Only paid and ongoing assessments write to CW.</li>
+    <li><strong>User count captured during the paid assessment</strong> drives managed service pricing automatically — Rewst calculates the correct product tier and pre-populates the proposal.</li>
+    <li>Every step that can be automated, is automated via Rewst. Manual steps are clearly labelled.</li>
+  </ul>
+</div>
+
+<!-- ══ PRODUCTS & PRICING ══════════════════════════════════════════════════ -->
+<div id="products" class="article">
+  <div class="art-kicker">Reference</div>
+  <div class="art-title">Products &amp; Pricing</div>
+  <div class="art-meta"><span>👤 Owner: Danny</span><span>📅 March 2026</span></div>
+
+  <h2>Paid Assessment — standalone product</h2>
+  <div class="price-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="price-card">
+      <div class="price-label">Fixed fee — all client sizes</div>
+      <div class="price-val">£495</div>
+      <div class="price-sub">One-off · Not credited against managed service</div>
+    </div>
+    <div class="price-card" style="text-align:left;padding:18px 20px;">
+      <div class="price-label">What's included</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:13px;margin-top:6px;line-height:1.65;">
+        3–4 hour consultant-led session<br/>
+        Verified Technology Resilience Score™ across 10 domains<br/>
+        Consultant-verified risk register<br/>
+        Phased roadmap (Phase 1/2/3)<br/>
+        Managed service proposal generated from assessment data
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">The assessment fee is never refunded or credited</div>
+      <p class="callout-text">The paid assessment is a commercial product in its own right. Whether or not the client proceeds to a managed service, the assessment fee (£495) is charged and retained. Do not offer to credit it against onboarding.</p>
+    </div>
+  </div>
+
+  <h2>Managed Service — monthly recurring</h2>
+  <div class="price-grid">
+    <div class="price-card">
+      <div class="price-label">Up to 10 users</div>
+      <div class="price-val">£750</div>
+      <div class="price-sub">Per month · Fixed rate</div>
+    </div>
+    <div class="price-card">
+      <div class="price-label">11 users or more</div>
+      <div class="price-val">£75</div>
+      <div class="price-sub">Per user / per month<br/>e.g. 25 users = £1,875/mo</div>
+    </div>
+    <div class="price-card">
+      <div class="price-label">Annual contract value</div>
+      <div class="price-val" style="font-size:18px;line-height:1.3">Monthly × 12 + onboarding</div>
+      <div class="price-sub">e.g. 10 users = £9,950 yr 1</div>
+    </div>
+  </div>
+
+  <h2>Onboarding — one-off</h2>
+  <div class="price-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="price-card">
+      <div class="price-label">Up to 10 users</div>
+      <div class="price-val">£950</div>
+      <div class="price-sub">Fixed · One-off</div>
+    </div>
+    <div class="price-card">
+      <div class="price-label">11 users or more</div>
+      <div class="price-val">£95</div>
+      <div class="price-sub">Per user · One-off<br/>e.g. 25 users = £2,375</div>
+    </div>
+  </div>
+
+  <h2>ConnectWise product catalogue — 5 products total</h2>
+  <table class="product-table">
+    <thead><tr><th>Product name</th><th>Type</th><th>Price</th><th>When used</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Technology Resilience Assessment</td>
+        <td>One-off</td>
+        <td>£495 fixed</td>
+        <td>All clients — always this single product</td>
+      </tr>
+      <tr>
+        <td>Managed Service — Up to 10 Users</td>
+        <td>Recurring monthly</td>
+        <td>£750/mo</td>
+        <td>Client user count ≤10</td>
+      </tr>
+      <tr>
+        <td>Managed Service — Per User</td>
+        <td>Recurring monthly</td>
+        <td>£75/user/mo</td>
+        <td>Client user count 11+ (quantity = user count)</td>
+      </tr>
+      <tr>
+        <td>Onboarding — Up to 10 Users</td>
+        <td>One-off</td>
+        <td>£950 fixed</td>
+        <td>Client user count ≤10</td>
+      </tr>
+      <tr>
+        <td>Onboarding — Per User</td>
+        <td>One-off</td>
+        <td>£95/user</td>
+        <td>Client user count 11+ (quantity = user count)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <div class="callout-icon">ℹ️</div>
+    <div class="callout-body">
+      <div class="callout-title">Rewst auto-selects the correct products</div>
+      <p class="callout-text">When the managed service proposal is generated, Rewst reads the user count captured during the paid assessment and automatically adds the correct managed service and onboarding products to the CW Sell quote. If user count ≤10: adds the two flat-rate products. If 11+: adds the two per-user products with user count as the quantity.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BUILD STATUS ════════════════════════════════════════════════════════ -->
+<div id="status" class="article">
+  <div class="art-kicker">Reference</div>
+  <div class="art-title">Build Status</div>
+  <div class="art-meta"><span>👤 Owner: Nick Haley</span><span>📅 March 2026</span></div>
+
+  <table>
+    <thead><tr><th>Component</th><th>Status</th><th>Owner</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Lite assessment app</td><td><span class="badge b-live">✅ Live</span></td><td>Nick</td><td>Live at lbt-assessment.vercel.app, embedded in WordPress</td></tr>
+      <tr><td>Rewst — lite assessment automation</td><td><span class="badge b-live">✅ Live</span></td><td>Nick</td><td>HubSpot, Pipedrive, Resend emails, Teams alert all working</td></tr>
+      <tr><td>Consultant tool v3 (Paid/Ongoing/QBR)</td><td><span class="badge b-deploy">🔧 Deploying</span></td><td>Nick</td><td>Deploying at lbt-assessment.vercel.app/consultant</td></tr>
+      <tr><td>ConnectWise company custom fields (24)</td><td><span class="badge b-next">📋 Next</span></td><td>CW Admin + Ella</td><td>Required before any scores write to CW</td></tr>
+      <tr><td>Rewst — write scores to CW on assessment submit</td><td><span class="badge b-next">📋 Next</span></td><td>Nick</td><td>Blocks all downstream automation — priority 1</td></tr>
+      <tr><td>User + device count fields in consultant tool</td><td><span class="badge b-next">📋 Next</span></td><td>Nick</td><td>Required for managed service pricing calculation</td></tr>
+      <tr><td>CW Sell — paid assessment template</td><td><span class="badge b-next">📋 Next</span></td><td>Danny + Nick</td><td>Short-form proposal, single £495 product</td></tr>
+      <tr><td>CW Sell — managed service template</td><td><span class="badge b-next">📋 Next</span></td><td>Nick + Danny</td><td>Branded SOW + token map from CW custom fields</td></tr>
+      <tr><td>CW product catalogue — 5 products</td><td><span class="badge b-next">📋 Next</span></td><td>Nick / Ella</td><td>See Products &amp; Pricing article for full spec</td></tr>
+      <tr><td>Rewst — pricing logic + CW Sell quote auto-creation</td><td><span class="badge b-next">📋 Next</span></td><td>Nick</td><td>Reads user count, selects correct products, creates draft quote</td></tr>
+      <tr><td>PSA — paid assessment project template</td><td><span class="badge b-next">📋 Next</span></td><td>Blake + Ella</td><td>Tasks, assigned to Jack, reviewed by Blake</td></tr>
+      <tr><td>PDF report generation</td><td><span class="badge b-next">📋 Next</span></td><td>Nick</td><td>Rewst → M365 Graph API → Word template → SharePoint</td></tr>
+      <tr><td>CW agreement template — managed service</td><td><span class="badge b-planned">🗓 Planned</span></td><td>Nick / Ella</td><td>Recurring billing at correct rates, activated on proposal sign</td></tr>
+      <tr><td>PSA — onboarding project template</td><td><span class="badge b-planned">🗓 Planned</span></td><td>Blake + Nick</td><td>Phase 1 tasks mapped to assessment control IDs</td></tr>
+      <tr><td>BrightGauge dashboards</td><td><span class="badge b-planned">🗓 Planned</span></td><td>Ella</td><td>Needs CW fields populated from first real assessment</td></tr>
+      <tr><td>Hudu portal — TRS score display</td><td><span class="badge b-planned">🗓 Planned</span></td><td>Ella</td><td>Needs CloudRadial configured + CW fields live</td></tr>
+      <tr><td>QBR Rewst reminder workflow</td><td><span class="badge b-planned">🗓 Planned</span></td><td>Nick</td><td>Fires when LBT_Next_Assessment date is reached</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ STEPS 1–16 ═════════════════════════════════════════════════════════ -->
+
+<!-- STEP 1 -->
+<div id="step1" class="article">
+  <div class="art-kicker">Phase 1 — Lead Generation · Step 1</div>
+  <div class="art-title">Prospect Completes Lite Assessment</div>
+  <div class="art-meta"><span>👤 Prospect — self-service</span><span><span class="badge b-live">✅ Live</span></span></div>
+  <p>A prospect arrives at <strong>littlebigtech.co.uk/assessment</strong> via marketing, referral, or sales outreach. Before accessing the assessment they complete a contact gate capturing name, email, company name, and phone number. They then complete the 30-question lite assessment — approximately 15 minutes.</p>
+  <div class="callout info"><div class="callout-icon">ℹ️</div><div class="callout-body"><div class="callout-title">Lite scores are self-reported and unvalidated</div><p class="callout-text">Lite assessment scores are never written to ConnectWise company fields. They exist in HubSpot and Pipedrive only. Only paid and ongoing assessments — verified by an LBT consultant — write to CW company records.</p></div></div>
+  <h2>What is captured</h2>
+  <ul>
+    <li>Contact name, email, company, phone</li>
+    <li>Overall Technology Resilience Score (1–5)</li>
+    <li>Score per domain (10 domains)</li>
+    <li>Top 3 priority gaps</li>
+    <li>Critical gaps count (score = 1) and priority gaps count (score = 2)</li>
+  </ul>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-client">🟣 Prospect completes assessment</span><span class="trigger t-system">🔷 Vercel API fires on submit</span><span class="trigger t-auto">⚡ Rewst webhook triggered</span></div>
+</div>
+
+<!-- STEP 2 -->
+<div id="step2" class="article">
+  <div class="art-kicker">Phase 1 — Lead Generation · Step 2</div>
+  <div class="art-title">Automation Fires — CRM, Emails, Teams Alert</div>
+  <div class="art-meta"><span>⚡ Rewst — fully automated</span><span><span class="badge b-live">✅ Live</span></span></div>
+  <p>Immediately on assessment submission, the Vercel serverless API fires the Rewst webhook. Rewst orchestrates the following actions automatically — no manual intervention required.</p>
+  <h2>What Rewst does</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">HubSpot contact upsert</div><div class="step-body">Creates or updates the HubSpot contact with name, email, company, phone, overall score, maturity band, top risks, domain scores for Cyber, IAM, and BC/DR, critical gap count, and estimated ARR opportunity.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Pipedrive person + lead created</div><div class="step-body">Creates a Pipedrive person record and a lead, linked to the contact. Lead value set to estimated ARR. Stage set to "New — Assessment Completed".</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Email to prospect</div><div class="step-body">Branded score report email sent to the prospect via Resend. Contains their overall score, domain breakdown, top 3 priority gaps, and a Calendly link to book a discovery call.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Sales alert in Teams</div><div class="step-body">Alert fires to the LBT sales channel in Microsoft Teams. Contains: company name, contact name, overall score, top 3 risks, estimated ARR, and a direct link to the HubSpot contact record.</div></div></div>
+  </div>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-auto">⚡ Rewst webhook on submission</span><span class="trigger t-auto">⚡ HubSpot upsert</span><span class="trigger t-auto">⚡ Pipedrive lead created</span><span class="trigger t-auto">⚡ Resend email to prospect</span><span class="trigger t-auto">⚡ Teams sales channel alert</span></div>
+</div>
+
+<!-- STEP 3 -->
+<div id="step3" class="article">
+  <div class="art-kicker">Phase 1 — Lead Generation · Step 3</div>
+  <div class="art-title">Sales Response — Book Discovery Call</div>
+  <div class="art-meta"><span>👤 Matt or Ryan</span><span>⏱ SLA: within 2 hours of Teams alert</span></div>
+  <p>Matt or Ryan receives the Teams alert, opens the HubSpot contact to review the prospect's score and top gaps, and reaches out within 2 hours. The goal of this contact is to book a discovery call — not to sell the managed service, but to sell the paid assessment engagement.</p>
+  <h2>How to personalise the outreach</h2>
+  <p>Use the score data from the Teams alert to make the outreach specific. Examples:</p>
+  <ul>
+    <li><em>"I can see your assessment flagged Business Continuity &amp; DR as your highest-risk area — that's something we see a lot in [sector]. Worth a quick call to talk through what that actually means in practice?"</em></li>
+    <li><em>"Your Technology Resilience Score came in at 2.3 — most organisations your size are operating at 3.5+. We can walk you through exactly what's driving that gap in about 30 minutes."</em></li>
+  </ul>
+  <h2>Goal of this step</h2>
+  <p>Book a discovery call (Step 4). The discovery call is where the paid assessment is sold. Do not try to sell the managed service at this stage.</p>
+  <div class="gap-box"><strong>📋 Gap:</strong> Calendly link should be included in the Teams alert and the prospect email automatically. Pipedrive stage should auto-update to "Contacted" when first activity is logged. Sales outreach script for this step needed — Danny to produce.</div>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-manual">👤 Sales outreach</span><span class="trigger t-manual">👤 Calendly booking</span></div>
+</div>
+
+<!-- STEP 4 -->
+<div id="step4" class="article">
+  <div class="art-kicker">Phase 2 — Assessment Sale · Step 4</div>
+  <div class="art-title">Discovery Call — Sell the Paid Assessment</div>
+  <div class="art-meta"><span>👤 Danny / Matt / Ryan</span></div>
+  <p>The discovery call uses the lite assessment score as the anchor. The goal is to explain the value of the paid assessment as a standalone commercial engagement and get agreement to proceed.</p>
+  <h2>Call structure</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Open with the score</div><div class="step-body">"Your Technology Resilience Score of [X] places you below the benchmark for organisations your size — most are operating at 3.5+. That's not a criticism — it's actually a clear opportunity, and it's why I wanted to speak to you."</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Walk through the top 2–3 gaps</div><div class="step-body">Use the domain scores from HubSpot to pick the 2–3 most critical areas. Frame each as a business risk, not a technical gap. "Your backup position is your highest risk — without a tested recovery capability, a ransomware incident could be catastrophic."</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Position the paid assessment</div><div class="step-body">"What you've done today gives us the headline picture. The paid assessment is a 3–4 hour consultant-led session where we verify everything against your actual configuration and produce a full risk register, a phased roadmap, and a proposal for making these improvements. It's £495 and it gives you everything you need to make an informed decision about your technology investment." </div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Close to next step</div><div class="step-body">Agreement to receive the assessment proposal, or verbal agreement to proceed. Do not send the proposal cold without a verbal yes — it should follow a committed conversation.</div></div></div>
+  </div>
+  <div class="gap-box"><strong>📋 Gap:</strong> Full sales discovery script and objection handling guide needed. Danny to draft. Should be stored in Hudu and referenced in onboarding for new sales team members.</div>
+</div>
+
+<!-- STEP 5 -->
+<div id="step5" class="article">
+  <div class="art-kicker">Phase 2 — Assessment Sale · Step 5</div>
+  <div class="art-title">Paid Assessment Proposal Created in CW Sell</div>
+  <div class="art-meta"><span>👤 Sales + ⚡ CW Sell</span><span><span class="badge b-next">📋 Next sprint</span></span></div>
+  <p>Following the discovery call, a short-form proposal for the paid assessment is created in ConnectWise Sell. This is a simple, clean document — not the full managed service proposal. It uses lite assessment context to personalise the narrative.</p>
+  <h2>Pricing</h2>
+  <table>
+    <thead><tr><th>Product</th><th>Price</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td>Technology Resilience Assessment</td><td><strong>£495</strong></td><td>Fixed fee — one product, all client sizes</td></tr>
+    </tbody>
+  </table>
+  <h2>What the proposal covers</h2>
+  <ul>
+    <li>What the paid assessment is and what it produces</li>
+    <li>Why the client's lite score makes it the right next step (personalised narrative)</li>
+    <li>What they will receive: verified TRS™, risk register, phased roadmap, managed service proposal</li>
+    <li>Logistics: 3–4 hours, screen-share or on-site, what to have ready</li>
+    <li>Single line item: Technology Resilience Assessment — £495</li>
+    <li>E-signature block</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Next sprint:</strong> CW Sell template for the paid assessment proposal to be built. One product in CW catalogue: "Technology Resilience Assessment" at £495. Rewst to auto-create draft quote in Sell when Pipedrive deal moves to "Assessment Proposed" stage.</div>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-manual">👤 Sales creates quote in CW Sell</span><span class="trigger t-system">🔷 CW Sell delivery</span></div>
+</div>
+
+<!-- STEP 6 -->
+<div id="step6" class="article">
+  <div class="art-kicker">Phase 2 — Assessment Sale · Step 6</div>
+  <div class="art-title">Proposal Signed — Assessment Purchased</div>
+  <div class="art-meta"><span>👤 Prospect + ⚡ Rewst</span><span><span class="badge b-next">📋 Next sprint</span></span></div>
+  <p>The prospect e-signs the assessment proposal in CW Sell. On signing, Rewst triggers a sequence of automated actions.</p>
+  <h2>What happens automatically</h2>
+  <ul>
+    <li>Pipedrive deal stage → "Assessment Won"</li>
+    <li>HubSpot lifecycle stage → "Customer"</li>
+    <li>ConnectWise company record created or updated</li>
+    <li>PSA project created from the "Paid Assessment" project template</li>
+    <li>Project assigned to Jack (consultant) with Blake as reviewer</li>
+    <li>Jack notified via Teams / email that a new assessment project is ready</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Next sprint:</strong> CW Sell webhook → Rewst trigger on quote signed. PSA "Paid Assessment" project template to be created in ConnectWise. Project template must assign Jack as consultant and Blake as reviewer with a 5-working-day SLA to schedule the session.</div>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-client">🟣 Client e-signs in CW Sell</span><span class="trigger t-auto">⚡ CW company created/updated</span><span class="trigger t-auto">⚡ PSA project created</span><span class="trigger t-auto">⚡ Pipedrive + HubSpot updated</span></div>
+</div>
+
+<!-- STEP 7 -->
+<div id="step7" class="article">
+  <div class="art-kicker">Phase 3 — Assessment Delivery · Step 7</div>
+  <div class="art-title">Assessment Session Scheduled</div>
+  <div class="art-meta"><span>👤 Jack</span><span>⏱ SLA: scheduled within 5 working days of project creation</span></div>
+  <p>Jack picks up the PSA project, contacts the client to find a suitable time for the 3–4 hour assessment session, and sends the pre-session email from the Hudu template.</p>
+  <h2>Before the session</h2>
+  <ul>
+    <li>Send the pre-session email (template in Hudu — Assessment Tool guide)</li>
+    <li>Create the SharePoint evidence folder: <code>Clients / [Company Name] / Assessment / [YYYY-MM-DD]</code></li>
+    <li>Open the consultant tool at <code>lbt-assessment.vercel.app/consultant</code> and complete the Client Setup tab before the session starts</li>
+    <li>Set the platform (M365 or Google Workspace) and operating model — these drive opt-out suggestions throughout the assessment</li>
+    <li>Note the client's user count and device count — required for managed service pricing</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Gap:</strong> Pre-session email should be a Hudu-stored template linked from the PSA project task. PSA task "Schedule session" should have a 5-working-day SLA trigger from project creation date.</div>
+</div>
+
+<!-- STEP 8 -->
+<div id="step8" class="article">
+  <div class="art-kicker">Phase 3 — Assessment Delivery · Step 8</div>
+  <div class="art-title">Assessment Conducted Using Consultant Tool</div>
+  <div class="art-meta"><span>👤 Jack</span><span><span class="badge b-deploy">🔧 Tool deploying</span></span></div>
+  <p>Jack conducts the full paid assessment using the consultant tool. The session takes 3–4 hours and covers all 10 domains across 30 controls, with platform-specific guidance for M365 or Google Workspace throughout.</p>
+  <h2>Key things to capture</h2>
+  <ul>
+    <li><strong>User count</strong> — total number of users. This drives managed service pricing.</li>
+    <li><strong>Device count</strong> — total devices in scope. Referenced in the proposal.</li>
+    <li><strong>Platform</strong> — M365 or Google Workspace (set in Setup tab)</li>
+    <li><strong>Operating model</strong> — office / WFH / hybrid / serviced (drives opt-out suggestions)</li>
+    <li><strong>Evidence</strong> — screenshots, policy references, dates for every control scored 3 or above</li>
+    <li><strong>Opt-outs</strong> — any N/A, Third-Party, Deferred, or Risk Accepted controls with documented reasons</li>
+  </ul>
+  <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><div class="callout-title">If you cannot see it, you cannot score it above 2</div><p class="callout-text">Every score of 3 or above requires observable evidence captured during the session. Client reassurance is not evidence. Read the Scoring Playbook before your first session.</p></div></div>
+  <div class="built-box"><strong>✅ Built:</strong> Consultant tool v3 deploying. Paid, Ongoing, and QBR modes. Platform-aware guidance, opt-out framework, evidence capture, scoring guide embedded in each control.</div>
+  <div class="gap-box"><strong>📋 Gap:</strong> User count and device count fields need adding to the consultant tool Setup tab. These are currently not captured — this is a critical gap as they drive pricing.</div>
+</div>
+
+<!-- STEP 9 -->
+<div id="step9" class="article">
+  <div class="art-kicker">Phase 3 — Assessment Delivery · Step 9</div>
+  <div class="art-title">Report Generated &amp; All Systems Updated</div>
+  <div class="art-meta"><span>⚡ Rewst — automated on assessment submission</span><span><span class="badge b-next">📋 Next sprint</span></span></div>
+  <p>Jack clicks "Write to ConnectWise" in the consultant tool to submit the assessment. Rewst takes over and orchestrates all system updates automatically.</p>
+  <h2>What Rewst does on submission</h2>
+  <ul>
+    <li>Writes all <code>LBT_Score_*</code> domain scores and overall score to the CW company record (24 fields)</li>
+    <li>Updates HubSpot contact with all 10 domain scores, overall score, top risks, critical gap count</li>
+    <li>Generates PDF report via M365 Graph API (Word template → SharePoint)</li>
+    <li>Writes report URL to <code>LBT_Report_URL</code> CW custom field</li>
+    <li>Sends report email to client contact via Resend</li>
+    <li>Closes "Assessment Complete" task in the PSA project</li>
+    <li>Sets <code>LBT_Assessment_Tier</code> to "paid" on CW company record</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Next sprint:</strong> "Write to ConnectWise" button in consultant tool needs wiring to Rewst webhook — currently shows a placeholder. PDF report generation via M365 Graph API needs building. Report email template needed in Resend.</div>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-manual">👤 Jack clicks "Write to ConnectWise"</span><span class="trigger t-auto">⚡ CW company fields updated (24)</span><span class="trigger t-auto">⚡ HubSpot updated</span><span class="trigger t-auto">⚡ PDF generated + emailed</span><span class="trigger t-auto">⚡ PSA task closed</span></div>
+</div>
+
+<!-- STEP 10 -->
+<div id="step10" class="article">
+  <div class="art-kicker">Phase 4 — Managed Service Proposal · Step 10</div>
+  <div class="art-title">Managed Service Opportunity Created in PSA</div>
+  <div class="art-meta"><span>⚡ Rewst — auto-created from assessment data</span><span><span class="badge b-next">📋 Next sprint</span></span></div>
+  <p>Simultaneously with writing scores to CW, Rewst creates a ConnectWise PSA opportunity linked to the company. The opportunity value is automatically calculated from the user count captured during the assessment.</p>
+  <h2>Pricing logic</h2>
+  <table>
+    <thead><tr><th>User count</th><th>Monthly ARR</th><th>Onboarding</th><th>Products added</th></tr></thead>
+    <tbody>
+      <tr><td>≤10 users</td><td>£750/mo (£9,000/yr)</td><td>£950</td><td>Managed Service — Up to 10 Users + Onboarding — Up to 10 Users</td></tr>
+      <tr><td>11+ users</td><td>£75 × user count/mo</td><td>£95 × user count</td><td>Managed Service — Per User (qty = users) + Onboarding — Per User (qty = users)</td></tr>
+    </tbody>
+  </table>
+  <h2>Opportunity settings</h2>
+  <ul>
+    <li>Type: Managed Service</li>
+    <li>Assigned to: Danny</li>
+    <li>Expected close date: today + 30 days</li>
+    <li>Value: annual contract value (monthly × 12 + onboarding)</li>
+    <li>Stage: "Proposal Pending"</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Next sprint:</strong> Rewst pricing logic to be built: IF users ≤10 THEN use flat-rate products ELSE use per-user products with user count as quantity. Requires user count to be captured in consultant tool first (Step 8 gap).</div>
+</div>
+
+<!-- STEP 11 -->
+<div id="step11" class="article">
+  <div class="art-kicker">Phase 4 — Managed Service Proposal · Step 11</div>
+  <div class="art-title">Managed Service Proposal Auto-Generated in CW Sell</div>
+  <div class="art-meta"><span>⚡ Rewst → CW Sell</span><span><span class="badge b-next">📋 Next sprint</span></span></div>
+  <p>Rewst calls the CW Sell API to create a draft quote linked to the opportunity and company. The quote template auto-populates with rich HTML content pulled from CW company custom fields.</p>
+  <h2>Proposal sections and content sources</h2>
+  <table>
+    <thead><tr><th>Section</th><th>Content source</th><th>Editable by sales?</th></tr></thead>
+    <tbody>
+      <tr><td>Cover page</td><td>Company name + score tokens from CW</td><td>Cover note only</td></tr>
+      <tr><td>Executive summary</td><td><code>LBT_Exec_Summary</code> CW field (Rewst-generated)</td><td>Minor personalisation</td></tr>
+      <tr><td>Domain score breakdown</td><td><code>LBT_Domain_Scores_Text</code> CW field</td><td>No</td></tr>
+      <tr><td>Risk register</td><td><code>LBT_Risk_Register_Text</code> CW field</td><td>Context notes only</td></tr>
+      <tr><td>Phase 1 roadmap</td><td><code>LBT_Phase1_Summary</code> CW field</td><td>Timeline adjustments</td></tr>
+      <tr><td>Phase 2 &amp; 3 roadmap</td><td><code>LBT_Phase2_Summary</code> + <code>LBT_Phase3_Summary</code></td><td>Timeline adjustments</td></tr>
+      <tr><td>Investment introduction</td><td>Static branded bridge text (in template)</td><td>No</td></tr>
+      <tr><td>Product line items</td><td>Auto-added from CW catalogue based on user count</td><td>Yes — confirm quantities</td></tr>
+      <tr><td>Journey narrative</td><td>Static — "working together over time"</td><td>No</td></tr>
+      <tr><td>Why LBT</td><td>Static brand section</td><td>No</td></tr>
+      <tr><td>Next steps + e-signature</td><td>CW Sell native</td><td>No</td></tr>
+    </tbody>
+  </table>
+  <div class="callout info"><div class="callout-icon">ℹ️</div><div class="callout-body"><div class="callout-title">Note on CW Sell styling</div><p class="callout-text">The narrative SOW sections (exec summary, risk register, roadmap, journey) are fully branded HTML rendered in Sell. The product line item table is native CW Sell rendering and cannot be custom-styled — it is styled via the LBT quote theme (Squid Ink + Citrus colours applied in Sell Settings → Themes).</p></div></div>
+  <div class="gap-box"><strong>📋 Next sprint:</strong> CW Sell managed service template to be built with all SOW sections and token map. Quote theme to be set to LBT brand colours. Rewst CW Sell API integration to create and populate the quote automatically.</div>
+</div>
+
+<!-- STEP 12 -->
+<div id="step12" class="article">
+  <div class="art-kicker">Phase 4 — Managed Service Proposal · Step 12</div>
+  <div class="art-title">Proposal Reviewed by Danny and Delivered</div>
+  <div class="art-meta"><span>👤 Danny</span><span>⏱ SLA: reviewed and sent within 48 hours of assessment submission</span></div>
+  <p>Danny receives a Teams notification that the draft proposal is ready in CW Sell. He reviews it, confirms accuracy, adds a personalised cover note, and sends it to the client.</p>
+  <h2>Pre-send review checklist</h2>
+  <ul>
+    <li>Executive summary narrative is accurate and uses correct client name throughout</li>
+    <li>Domain scores match what Jack reported from the assessment</li>
+    <li>Risk register entries are appropriate and correctly rated</li>
+    <li>Phase 1 items are realistic for this client's environment</li>
+    <li>Product line items show the correct pricing tier (check user count vs products selected)</li>
+    <li>Cover note personalised — 2–3 sentences referencing something specific from the session</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Gap:</strong> CW Sell delivery tracking (opened, viewed, time on page) should feed back to the Teams sales channel. Danny needs a notification when the client opens the proposal.</div>
+</div>
+
+<!-- STEP 13 -->
+<div id="step13" class="article">
+  <div class="art-kicker">Phase 4 — Managed Service Proposal · Step 13</div>
+  <div class="art-title">Follow-Up Sales Call</div>
+  <div class="art-meta"><span>👤 Danny / Matt / Ryan</span><span>⏱ 48–72 hours after proposal sent</span></div>
+  <p>Sales calls the client to walk through the proposal. This is not a passive "did you get our email?" call — it is a structured conversation using the TRS score to create urgency and frame the investment.</p>
+  <h2>Call structure</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Open with the score</div><div class="step-body">"Your Technology Resilience Score of [X] — assessed against your actual environment by Jack — places you [vs benchmark]. That's the starting point for everything in the proposal."</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Walk the top 3 risk register entries</div><div class="step-body">Focus on RR-001 to RR-003. Connect each to a specific business risk — ransomware, ICO enforcement, credential compromise. Keep it plain English.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Show the trajectory</div><div class="step-body">"Phase 1 alone lifts your score from [X] to [post-onboarding score] within 90 days. That's the point at which your most critical exposures are eliminated."</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Handle objections and close</div><div class="step-body">Use the objection handling guide (Sales Resources in Hudu). Goal: verbal agreement and a timeline for signing.</div></div></div>
+  </div>
+</div>
+
+<!-- STEP 14 -->
+<div id="step14" class="article">
+  <div class="art-kicker">Phase 5 — Close &amp; Onboarding · Step 14</div>
+  <div class="art-title">Proposal Signed — Everything Triggers</div>
+  <div class="art-meta"><span>👤 Client + ⚡ Rewst</span><span><span class="badge b-planned">🗓 Planned</span></span></div>
+  <p>The client e-signs the managed service proposal in CW Sell. This single action triggers the entire onboarding sequence automatically via Rewst.</p>
+  <h2>What happens automatically</h2>
+  <ul>
+    <li>ConnectWise <strong>agreement created</strong> — recurring billing activated at the correct rate based on user count</li>
+    <li>ConnectWise <strong>onboarding project created</strong> from the onboarding project template</li>
+    <li>Phase 1 tasks generated from <code>LBT_Phase1_Summary</code> CW field and added to the project</li>
+    <li><code>LBT_Roadmap_Phase</code> set to "Phase 1" on CW company record</li>
+    <li>First QBR date set to today + 90 days — written to <code>LBT_Next_Assessment</code></li>
+    <li>Welcome email sent to client contact via Resend</li>
+    <li>Pipedrive deal stage → "Managed Service Won"</li>
+    <li>HubSpot deal updated with contract value</li>
+  </ul>
+  <div class="gap-box"><strong>📋 Next sprint:</strong> CW agreement template for managed service recurring billing. Onboarding project template with Phase 1 task structure. Rewst logic to generate Phase 1 tasks from the assessment data. Billing activation — agreement type and product mapping.</div>
+  <h2>Triggers</h2>
+  <div><span class="trigger t-client">🟣 Client e-signs proposal</span><span class="trigger t-auto">⚡ CW agreement created</span><span class="trigger t-auto">⚡ Onboarding project created</span><span class="trigger t-auto">⚡ Phase 1 tasks generated</span><span class="trigger t-auto">⚡ QBR date set (today + 90 days)</span><span class="trigger t-auto">⚡ Welcome email sent</span><span class="trigger t-auto">⚡ Billing activated</span></div>
+</div>
+
+<!-- STEP 15 -->
+<div id="step15" class="article">
+  <div class="art-kicker">Phase 5 — Close &amp; Onboarding · Step 15</div>
+  <div class="art-title">Onboarding Delivery — Phase 1</div>
+  <div class="art-meta"><span>👤 Jack + LBT team</span><span>⏱ Phase 1 complete within 30 days of signing</span></div>
+  <p>Phase 1 items are delivered within 30 days. Every task in the onboarding project maps to a control in the assessment that scored below 2.5. On completion of Phase 1, Jack runs a score re-check in the consultant tool (Ongoing mode) to confirm the score has improved.</p>
+  <h2>Phase 1 standard items</h2>
+  <p>These are generated from the assessment. The exact list varies per client based on their scores, but typically includes:</p>
+  <ul>
+    <li>Axient 360 immutable cloud backup — all M365 or Google Workspace workloads</li>
+    <li>MFA enforced via Conditional Access / Google 2SV — all users, all applications</li>
+    <li>Huntress full suite — MDR, ITDR, SAT across all endpoints</li>
+    <li>Proofpoint Essentials Advanced — email security + DMARC p=reject</li>
+    <li>ConnectWise PAM — privileged access management for admin accounts</li>
+    <li>JML process formalisation — leaver SLA ≤4 hours, ticket-tracked</li>
+  </ul>
+  <h2>90-day score re-check</h2>
+  <p>When Phase 1 is complete, Jack opens the consultant tool in <strong>Ongoing mode</strong>, pre-populates the previous scores, updates only the controls that have changed, and submits. Rewst writes the updated scores to CW and generates a score re-check report emailed to the client.</p>
+  <div class="gap-box"><strong>📋 Gap:</strong> Onboarding project template tasks need to map directly to assessment control IDs so the score re-check is pre-loaded in Ongoing mode. 90-day score re-check report email template needed in Resend.</div>
+</div>
+
+<!-- STEP 16 -->
+<div id="step16" class="article">
+  <div class="art-kicker">Phase 5 — Close &amp; Onboarding · Step 16</div>
+  <div class="art-title">Quarterly QBR — Ongoing Growth Loop</div>
+  <div class="art-meta"><span>👤 Jack + Danny + client</span><span>⏱ Every 90 days</span><span><span class="badge b-live">✅ QBR mode built</span></span></div>
+  <p>Every 90 days, the Technology Resilience Score is reviewed and updated. This is not a passive check-in — it is a structured meeting that shows measurable progress, surfaces the next investment opportunities, and reinforces the LBT partnership narrative.</p>
+  <h2>QBR workflow</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Rewst reminder fires</div><div class="step-body">Rewst checks <code>LBT_Next_Assessment</code> daily and fires a reminder to Jack when the date is reached. Jack opens the consultant tool in QBR mode.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Update current quarter scores</div><div class="step-body">Jack updates scores for any controls that have changed since the last assessment. Previous scores are pre-populated. Only changed controls need updating.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Set client priorities</div><div class="step-body">Before the meeting, ask the client what matters most right now — compliance, insurance, growth, resilience, risk reduction, or cost. Select up to 3 in the Client Priorities tab. This steers the action plan.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Run the meeting using the QBR Report tab</div><div class="step-body">Show the score overview (QoQ delta), walk the prioritised action plan, show the score trajectory. Danny uses the remaining gaps to identify upsell opportunities naturally.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><div class="step-title">Submit — systems updated automatically</div><div class="step-body">Rewst writes updated scores to CW, archives previous score, calculates delta. QBR report emailed to client. Next QBR date set to today + 90 days.</div></div></div>
+  </div>
+  <div class="built-box"><strong>✅ Built:</strong> QBR mode live in consultant tool v3. Smart prioritisation engine with floor-first rule, client priority steering, quarter-on-quarter delta view, QBR report output.</div>
+  <div class="gap-box"><strong>📋 Gap:</strong> Rewst daily check on LBT_Next_Assessment date and reminder workflow. QBR report email template in Resend. BrightGauge dashboard showing score trends and clients approaching QBR date.</div>
+</div>
+
+<!-- ══ GAPS ══════════════════════════════════════════════════════════════════ -->
+<div id="gaps" class="article">
+  <div class="art-kicker">Reference</div>
+  <div class="art-title">Outstanding Gaps — Build Priority</div>
+  <div class="art-meta"><span>👤 Owner: Nick Haley</span><span>📅 March 2026</span></div>
+  <p>Everything needed to make the full workflow operational end to end. Items are prioritised — nothing downstream of a critical gap can be built until it is resolved.</p>
+
+  <h2>🔴 Critical — blocks everything downstream</h2>
+  <table>
+    <thead><tr><th>Gap</th><th>Owner</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>User + device count fields in consultant tool</strong> — needed for managed service pricing calculation. Without this, Rewst cannot auto-price the proposal.</td><td><span class="owner">Nick</span></td><td>This week</td></tr>
+      <tr><td><strong>"Write to ConnectWise" button wired to Rewst</strong> — currently shows a placeholder alert. Until this fires, no scores reach CW and no downstream automation runs.</td><td><span class="owner">Nick</span></td><td>This week</td></tr>
+      <tr><td><strong>ConnectWise company custom fields (24 fields)</strong> — must be created before any scores can be written to CW. See CW Custom Fields Setup guide in Hudu.</td><td><span class="owner">CW Admin + Ella</span></td><td>This week</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🟡 High — needed before first paid assessment sale</h2>
+  <table>
+    <thead><tr><th>Gap</th><th>Owner</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CW Sell — paid assessment proposal template</strong>. Single product: Technology Resilience Assessment £495.</td><td><span class="owner">Danny + Nick</span></td><td>Week 2</td></tr>
+      <tr><td><strong>PSA — paid assessment project template</strong>. Tasks, assigned to Jack, Blake as reviewer, 5-day SLA to schedule.</td><td><span class="owner">Blake + Ella</span></td><td>Week 2</td></tr>
+      <tr><td><strong>Sales discovery script</strong> — for selling the paid assessment on the discovery call.</td><td><span class="owner">Danny</span></td><td>This week</td></tr>
+      <tr><td><strong>CW product catalogue — 5 products</strong>. See Products &amp; Pricing article for exact names and prices.</td><td><span class="owner">Nick / Ella</span></td><td>Week 2</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🟡 High — needed before first managed service proposal</h2>
+  <table>
+    <thead><tr><th>Gap</th><th>Owner</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CW Sell — managed service proposal template</strong>. Branded SOW sections + token map pulling from CW custom fields.</td><td><span class="owner">Nick + Danny</span></td><td>Week 2–3</td></tr>
+      <tr><td><strong>Rewst — pricing logic + CW Sell quote auto-creation</strong>. IF users ≤10 THEN flat-rate products ELSE per-user products. Creates draft quote in Sell linked to opportunity.</td><td><span class="owner">Nick</span></td><td>Week 2–3</td></tr>
+      <tr><td><strong>CW Sell quote theme</strong>. LBT brand colours (Squid Ink #090D38, Citrus #F26101) applied to product table and acceptance button.</td><td><span class="owner">Nick</span></td><td>Week 2</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🟢 Medium — needed before first client onboards</h2>
+  <table>
+    <thead><tr><th>Gap</th><th>Owner</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PDF report generation</strong>. Rewst → M365 Graph API → Word template → SharePoint. Can be manually generated initially.</td><td><span class="owner">Nick</span></td><td>Week 3–4</td></tr>
+      <tr><td><strong>CW agreement template</strong>. Managed service recurring billing at correct rates, activated on proposal sign.</td><td><span class="owner">Nick / Ella</span></td><td>Week 3–4</td></tr>
+      <tr><td><strong>Onboarding project template</strong>. Phase 1 tasks mapped to assessment control IDs.</td><td><span class="owner">Blake + Nick</span></td><td>Week 3–4</td></tr>
+      <tr><td><strong>BrightGauge dashboards</strong>. Requires CW custom fields to have real data from at least one assessment.</td><td><span class="owner">Ella</span></td><td>After first assessment</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🔵 Lower priority</h2>
+  <table>
+    <thead><tr><th>Gap</th><th>Owner</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>QBR Rewst reminder workflow</strong>. Daily check on LBT_Next_Assessment, fires Teams notification when due.</td><td><span class="owner">Nick</span></td><td>Month 2</td></tr>
+      <tr><td><strong>Hudu portal — TRS score display</strong>. Client-facing score, last assessed, next review date. Requires CloudRadial configured.</td><td><span class="owner">Ella</span></td><td>Month 2</td></tr>
+      <tr><td><strong>CW Sell delivery tracking → Teams</strong>. Notify sales when client opens the proposal.</td><td><span class="owner">Nick</span></td><td>Month 2</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ OWNERS ════════════════════════════════════════════════════════════════ -->
+<div id="owners" class="article">
+  <div class="art-kicker">Reference</div>
+  <div class="art-title">Owners &amp; SLAs</div>
+  <div class="art-meta"><span>📅 March 2026</span></div>
+
+  <h2>Role responsibilities</h2>
+  <table>
+    <thead><tr><th>Person</th><th>Role</th><th>Owns</th></tr></thead>
+    <tbody>
+      <tr><td>Nick</td><td>Programme Lead</td><td>All technical build, Rewst, Vercel, CW integrations, question design, scoring playbook</td></tr>
+      <tr><td>Blake</td><td>Service Manager</td><td>Question set validation, scoring playbook, peer review of first 6 assessments, PSA project template, BrightGauge</td></tr>
+      <tr><td>Danny</td><td>Sales Director</td><td>Commercial framing, proposal pricing, sales scripts, proposal review before delivery, CW Sell template copy</td></tr>
+      <tr><td>Jack</td><td>Consultant</td><td>All paid assessment delivery, ongoing reassessments, QBR meetings, evidence capture</td></tr>
+      <tr><td>Matt &amp; Ryan</td><td>Sales &amp; SDR</td><td>Lite assessment lead response (≤2hrs), discovery call booking, assessment proposal delivery, follow-up calls</td></tr>
+      <tr><td>Ella</td><td>Operations</td><td>Project tracking, HubSpot/BrightGauge/Hudu setup tasks, CW field creation, scheduling</td></tr>
+    </tbody>
+  </table>
+
+  <h2>SLAs</h2>
+  <table>
+    <thead><tr><th>Step</th><th>SLA</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td>Sales response to lite assessment Teams alert</td><td>Within 2 hours</td><td>Matt / Ryan</td></tr>
+      <tr><td>Discovery call booked after first contact</td><td>Within 48 hours</td><td>Matt / Ryan</td></tr>
+      <tr><td>Paid assessment proposal sent after discovery call agreement</td><td>Same day</td><td>Matt / Ryan / Danny</td></tr>
+      <tr><td>Assessment session scheduled after PSA project created</td><td>Within 5 working days</td><td>Jack</td></tr>
+      <tr><td>Managed service proposal reviewed and sent after assessment submission</td><td>Within 48 hours</td><td>Danny</td></tr>
+      <tr><td>Follow-up sales call after proposal delivery</td><td>48–72 hours</td><td>Danny / Matt / Ryan</td></tr>
+      <tr><td>Phase 1 onboarding complete after contract signed</td><td>Within 30 days</td><td>Jack + LBT team</td></tr>
+      <tr><td>QBR cadence</td><td>Every 90 days</td><td>Jack + Danny</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function show(id) {
+  document.querySelectorAll('.article').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) t.classList.add('active');
+  document.querySelectorAll('.sb-link').forEach(l => {
+    if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) {
+      l.classList.add('active');
+    }
+  });
+  document.querySelector('.main').scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
